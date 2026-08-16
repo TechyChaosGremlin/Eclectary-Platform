@@ -1,0 +1,114 @@
+@import './variables.css';
+
+/* Dashboard header & layout styles — echo the site header's feel */
+.dashboard-header {
+  background: var(--gradient-primary);
+  color: white;
+  padding: calc(var(--gap-md) * 1.1) var(--gap-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+.dashboard-header .brand {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.dashboard-header .brand img {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-header .page-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  letter-spacing: 0.2px;
+}
+
+.dashboard-header .meta {
+  margin-left: auto;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.95rem;
+}
+
+/* Overall dashboard grid */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--gap-md);
+  align-items: start;
+}
+
+.dashboard-sidebar {
+  background: var(--surface);
+  padding: var(--gap-md);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.dashboard-sidebar .nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: 10px;
+  border-radius: 10px;
+  color: var(--color-muted);
+}
+
+.dashboard-sidebar .nav-item.active {
+  background: linear-gradient(90deg, rgba(var(--color-primary-rgb),0.06), rgba(var(--color-primary-rgb),0.02));
+  color: var(--color-primary);
+}
+
+.dashboard-content {
+  padding: var(--gap-md);
+}
+
+.breadcrumb {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin-bottom: calc(var(--gap-sm) / 2);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-md);
+}
+
+.card {
+  background: var(--surface);
+  padding: var(--gap-md);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-aura);
+}
+
+@media (max-width: var(--bp-md)) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: var(--bp-sm)) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dashboard-header .meta {
+    margin-left: 0;
+  }
+}
