@@ -91,7 +91,7 @@
   border: 1px solid var(--border-aura);
 }
 
-@media (max-width: var(--bp-md)) {
+@media (max-width: 1000px) {
   .dashboard-container {
     grid-template-columns: 1fr;
   }
@@ -100,7 +100,7 @@
   }
 }
 
-@media (max-width: var(--bp-sm)) {
+@media (max-width: 600px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }

@@ -1,0 +1,128 @@
+#center,
+#next-steps {
+  width: min(100% - 32px, 1100px);
+  margin: 0 auto;
+}
+
+#center {
+  display: grid;
+  gap: var(--gap-md);
+  min-height: 360px;
+  place-content: center;
+  padding: 72px 24px;
+  text-align: center;
+  background: var(--gradient-makers);
+  border-radius: var(--radius-lg);
+}
+
+#center h1,
+#next-steps h2 {
+  margin: 0;
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+}
+
+#center h1 {
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+}
+
+#center p,
+#next-steps p {
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+.counter {
+  justify-self: center;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: #fff;
+  background: var(--gradient-primary);
+  font: inherit;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.counter:hover,
+.counter:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.ticks {
+  height: 32px;
+}
+
+#next-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-md);
+}
+
+#docs,
+#social {
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border-aura);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  fill: var(--color-accent);
+}
+
+#next-steps ul {
+  display: grid;
+  gap: var(--gap-sm);
+  padding: 0;
+  margin: 20px 0 0;
+  list-style: none;
+}
+
+#next-steps a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+#next-steps a:hover,
+#next-steps a:focus-visible {
+  color: var(--color-primary-2);
+  text-decoration: underline;
+}
+
+.logo,
+.button-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+#spacer {
+  min-height: 48px;
+}
+
+@media (max-width: 600px) {
+  #center,
+  #next-steps {
+    width: min(100% - 20px, 1100px);
+  }
+
+  #center {
+    min-height: 300px;
+    padding: 52px 18px;
+  }
+
+  #next-steps {
+    grid-template-columns: 1fr;
+  }
+}

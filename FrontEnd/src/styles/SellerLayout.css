@@ -1,0 +1,29 @@
+@import './variables.css';
+
+.seller-layout,
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+  gap: var(--gap-md);
+  width: min(100% - 32px, 1400px);
+  margin: 20px auto;
+  align-items: start;
+}
+
+.seller-main,
+.dashboard-main {
+  min-width: 0;
+}
+
+.seller-content,
+.dashboard-content {
+  min-height: 60vh;
+  padding: var(--gap-md) 0;
+}
+
+@media (max-width: 1000px) {
+  .seller-layout,
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,230 @@
+@import './variables.css';
+
+/* Primary */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+body {
+  background-color: var(--bg);
+}
+
+/* Makers Section */
+.makers-section {
+  width: min(100%, 1100px);
+  margin: 0 auto;
+  padding: 60px 2% 90px;
+
+  /* subtle layered background instead of flat */
+  background: linear-gradient(
+    to bottom,
+    #CCD7B3 0%,
+    #F6F3EE 60%,
+    #F3EFE5 100%
+  );
+
+  border-radius: 18px;
+}
+
+/* Header */
+.makers-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 10px;
+}
+
+.makers-header h2 {
+  font-family: "Playfair Display", serif;
+  color: #58174C;
+  font-size: 48px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.makers-header p {
+  font-family: "Inter", sans-serif;
+  color: #666;
+  line-height: 1.7;
+}
+
+/* Grid */
+.makers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+
+  padding: 10px;
+
+  /* removed heavy border */
+}
+
+/* Card */
+.maker-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+
+  /* softer depth */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+
+  transition: all 0.3s ease;
+}
+
+/* subtle “aura” border instead of hard border */
+.maker-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  border: 1px solid rgba(204, 215, 179, 0.35);
+  pointer-events: none;
+  transition: border 0.3s ease;
+}
+
+/* Hover */
+.maker-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 30px rgba(88, 23, 76, 0.12);
+}
+
+.maker-card:hover::before {
+  border-color: rgba(201, 138, 107, 0.6);
+}
+
+/* Banner */
+.maker-banner {
+  display: none;
+}
+
+/* Profile */
+.maker-profile {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  text-align: center;
+  padding: 0 12px 4px;
+  position: relative;
+}
+
+.maker-avatar {
+  display: none;
+}
+
+.maker-profile h3 {
+  font-family: "Playfair Display", serif;
+  color: #58174C;
+  margin-top: 14px;
+  font-size: 1.4rem;
+  min-height: 2.8em;
+}
+
+.maker-type {
+  display: block;
+  color: #7b8f6a;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  min-height: 0;
+}
+
+.maker-profile p {
+  flex: 1;
+  margin-top: 8px;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Button */
+.maker-profile button {
+  background: linear-gradient(
+    135deg,
+    #58174C,
+    #A14D76
+  );
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-top: auto;
+
+  transition: all 0.25s ease;
+}
+
+.maker-profile button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(88, 23, 76, 0.25);
+}
+
+/* Footer */
+.makers-footer {
+  text-align: center;
+  margin-top: 45px;
+}
+
+.makers-footer a {
+  color: #58174C;
+  font-weight: 600;
+}
+/* Tablet maker layout: 601px to 1000px */
+@media (min-width: 601px) and (max-width: 1000px) {
+
+    .makers-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+/* Mobile maker layout: 600px and below */
+@media (max-width: 600px) {
+
+  .makers-section {
+    padding: 48px 10px 48px;
+  }
+
+    .makers-grid {
+        grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .maker-card {
+    width: min(100%, 300px);
+    margin: 0 auto;
+  }
+
+  .maker-banner {
+    height: 90px;
+  }
+
+  .maker-profile {
+    padding: 0 8px 2px;
+  }
+
+  .maker-avatar {
+    width: 58px;
+    height: 58px;
+    margin-top: -29px;
+    border-width: 3px;
+  }
+
+  .maker-profile h3 {
+    margin-top: 10px;
+    font-size: 1.25rem;
+    }
+
+    .makers-header h2 {
+      font-size: 40px;
+    margin-top: 0;
+    margin-bottom: 8px;
+    }
+
+}

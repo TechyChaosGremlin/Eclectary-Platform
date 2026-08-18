@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./DashboardHeader.css";
+import "../styles/DashboardHeader.css";
 
 function DashboardHeader() {
   return (

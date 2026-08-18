@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import "./DashboardSidebar.css";
+import "../styles/DashboardSidebar.css";
 
 function DashboardSidebar() {
   return (
