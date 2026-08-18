@@ -1,75 +1,128 @@
 :root {
-  /* Colors */
-  --bg: #F3EFE5;
-  --surface: #ffffff;
-  --color-primary: #58174C;
-  --color-primary-2: #A14D76;
-  --color-accent: #C98A6B;
-  --color-muted: #666666;
-  --color-success: #7b8f6a;
+  /* Purple palette */
+  --purple-50: #f8f1f5;
+  --purple-100: #f1e3eb;
+  --purple-200: #e3c8d7;
+  --purple-300: #d5a9c5;
+  --purple-400: #b66e98;
+  --purple-500: #9d4f7c;
+  --purple-600: #7d3d64;
+  --purple-700: #651f4d;
+  --purple-800: #58174c;
+  --purple-900: #3d0f35;
 
-  /* Gradients */
-  --gradient-makers: linear-gradient(to bottom, #CCD7B3 0%, #F6F3EE 60%, var(--bg) 100%);
-  --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-primary-2));
+  /* Sage palette */
+  --sage-50: #f3f7f1;
+  --sage-100: #e7efe1;
+  --sage-200: #d5e1cc;
+  --sage-300: #bfd2b0;
+  --sage-400: #9bb280;
+  --sage-500: #7b8f6a;
+  --sage-600: #687d58;
+  --sage-700: #4d5f3e;
+  --sage-800: #394a2f;
+  --sage-900: #243221;
 
-  /* Typography */
-  --font-heading: "Playfair Display", serif;
-  --font-body: "Inter", sans-serif;
+  /* Cream / beige palette */
+  --beige-50: #f8f5f0;
+  --beige-100: #f3efe5;
+  --beige-200: #eae2d2;
+  --beige-300: #dcc9ab;
+  --beige-400: #c98a6b;
+  --beige-500: #b67852;
+  --beige-600: #94654b;
+  --beige-700: #734f39;
+  --beige-800: #563d31;
+  --beige-900: #342922;
 
-  /* Radii & spacing */
-  --radius-lg: 18px;
-  --radius-pill: 25px;
-  --gap-xs: 8px;
-  --gap-sm: 12px;
-  --gap-md: 20px;
+  /* Neutral palette */
+  --neutral-0: #ffffff;
+  --neutral-50: #fafafa;
+  --neutral-100: #f2f2f2;
+  --neutral-200: #e7e7e7;
+  --neutral-300: #d9d9d9;
+  --neutral-400: #b1b1b1;
+  --neutral-500: #7c7c7c;
+  --neutral-600: #666666;
+  --neutral-700: #4b4b4b;
+  --neutral-800: #2d2d2d;
+  --neutral-900: #1b1b1b;
 
-  /* Shadows */
-  --shadow-sm: 0 6px 18px rgba(0,0,0,0.06);
-  --shadow-md: 0 14px 30px rgba(88, 23, 76, 0.12);
-
-  /* Borders */
-  --border-aura: rgba(204, 215, 179, 0.35);
-  --border-hover: rgba(201, 138, 107, 0.6);
-
-  /* Breakpoints */
-  --bp-sm: 600px;
-  --bp-md: 1000px;
-}
-:root {
-  /* Colors */
-  --bg: #F3EFE5;
-  --surface: #ffffff;
-  --color-primary: #58174C;
-  --color-primary-2: #A14D76;
-  --color-accent: #C98A6B;
-  --color-muted: #666666;
-  --color-success: #7b8f6a;
-
-  /* RGB helpers */
+  /* Brand aliases */
+  --bg: var(--beige-100);
+  --surface: var(--neutral-0);
+  --color-primary: var(--purple-800);
+  --color-primary-2: var(--purple-400);
+  --color-accent: var(--beige-400);
+  --color-muted: var(--neutral-600);
+  --color-success: var(--sage-500);
   --color-primary-rgb: 88, 23, 76;
 
   /* Gradients */
-  --gradient-makers: linear-gradient(to bottom, #CCD7B3 0%, #F6F3EE 60%, var(--bg) 100%);
+  --gradient-makers: linear-gradient(to bottom, #ccd7b3 0%, #f6f3ee 60%, var(--bg) 100%);
   --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-primary-2));
 
   /* Typography */
   --font-heading: "Playfair Display", serif;
   --font-body: "Inter", sans-serif;
 
-  /* Radii & spacing */
+  --heading-1-size: clamp(2.2rem, 1.8rem + 1.8vw, 4rem);
+  --heading-2-size: clamp(1.7rem, 1.4rem + 1.2vw, 3rem);
+  --heading-3-size: clamp(1.3rem, 1.1rem + 0.7vw, 2rem);
+  --heading-4-size: 1.15rem;
+
+  --body-text-size: 1rem;
+  --body-text-line-height: 1.6;
+  --body-text-weight: 400;
+  --body-text-color: var(--neutral-800);
+
+  --nav-text-size: 0.95rem;
+  --nav-text-weight: 600;
+  --nav-text-line-height: 1.4;
+  --nav-text-letter-spacing: 0.02em;
+  --nav-text-color: var(--neutral-700);
+
+  --button-text-size: 0.95rem;
+  --button-text-weight: 600;
+  --button-text-line-height: 1.2;
+  --button-text-letter-spacing: 0.02em;
+  --button-text-color: var(--neutral-0);
+
+  --text-heading: normal 700 var(--heading-2-size)/1.2 var(--font-heading);
+  --text-body: normal var(--body-text-weight) var(--body-text-size)/var(--body-text-line-height) var(--font-body);
+  --text-nav: normal var(--nav-text-weight) var(--nav-text-size)/var(--nav-text-line-height) var(--font-body);
+  --text-button: normal var(--button-text-weight) var(--button-text-size)/var(--button-text-line-height) var(--font-body);
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
   --radius-lg: 18px;
-  --radius-pill: 25px;
-  --gap-xs: 8px;
-  --gap-sm: 12px;
-  --gap-md: 20px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
 
   /* Shadows */
-  --shadow-sm: 0 6px 18px rgba(0,0,0,0.06);
+  --shadow-xs: 0 2px 8px rgba(29, 29, 29, 0.06);
+  --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 14px 30px rgba(88, 23, 76, 0.12);
+  --shadow-lg: 0 24px 45px rgba(29, 29, 29, 0.14);
 
   /* Borders */
   --border-aura: rgba(204, 215, 179, 0.35);
   --border-hover: rgba(201, 138, 107, 0.6);
+  --border-soft: rgba(88, 23, 76, 0.12);
 
   /* Breakpoints */
   --bp-sm: 600px;

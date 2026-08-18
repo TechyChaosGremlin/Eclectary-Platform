@@ -1,102 +1,98 @@
 @import './variables.css';
 
-/* Navbar styles (extracted) */
-
-/* Top Navigation */
 .top-nav {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 12px 20px;
-	gap: 12px;
-	background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 18px 0 14px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
 
 .top-nav .brand {
-	display: flex;
-	align-items: center;
-	text-decoration: none;
-	color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(88, 23, 76, 0.06);
+  box-shadow: var(--shadow-xs);
 }
 
 .top-nav .brand img {
-	display: block;
-	height: 40px;
-	width: auto;
-}
-
-.top-nav .search-icon {
-	font-size: 17px;
-	margin-right: 8px;
-}
-
-.top-nav .account-actions {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.top-nav .account-actions button {
-	background: none;
-	border: none;
-	padding: 8px 10px;
-	border-radius: 8px;
-	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	font: inherit;
-}
-
-.top-nav .account-actions button:hover,
-.top-nav .account-actions button:focus {
-	background: rgba(88,23,76,0.06);
-	outline: none;
-}
-
-/* small utility for icon spans */
-.top-nav .account-actions button .icon {
-	font-size: 18px;
-	line-height: 1;
-}
-
-/* New layout for nav left and inline links */
-.nav-left {
-	display: flex;
-	align-items: center;
-	gap: 16px;
+  display: block;
+  width: 34px;
+  height: 34px;
 }
 
 .site-links {
-	display: flex;
-	gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.site-links .link {
-	color: var(--color-muted);
-	text-decoration: none;
-	padding: 6px 10px;
-	border-radius: 8px;
-	font-weight: 600;
+.site-links .link,
+.account-actions .action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font: var(--text-nav);
+  color: var(--nav-text-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
 .site-links .link.active,
-.site-links .link:hover {
-	color: var(--color-primary);
-	background: rgba(var(--color-primary-rgb), 0.06);
+.site-links .link:hover,
+.account-actions .action:hover {
+  color: var(--color-primary);
+  background: rgba(var(--color-primary-rgb), 0.06);
+}
+
+.account-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .account-actions .action {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	padding: 6px 10px;
-	border-radius: 8px;
-	text-decoration: none;
-	color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-xs);
 }
 
-.account-actions .action:hover {
-	background: rgba(88,23,76,0.06);
+.account-actions .action:last-child {
+  background: var(--gradient-primary);
+  color: var(--neutral-0);
+  border-color: transparent;
+}
+
+@media (max-width: 600px) {
+  .top-nav {
+    width: min(100% - 20px, 1200px);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-left,
+  .account-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .site-links {
+    flex-wrap: wrap;
+  }
 }
 

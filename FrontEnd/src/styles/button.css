@@ -1,0 +1,62 @@
+.market-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font: var(--text-button);
+  letter-spacing: var(--button-text-letter-spacing);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.market-btn:hover {
+  transform: translateY(-1px);
+}
+
+.market-btn--sm {
+  min-height: 36px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+}
+
+.market-btn--md {
+  min-height: 44px;
+  padding: 11px 22px;
+}
+
+.market-btn--lg {
+  min-height: 50px;
+  padding: 13px 28px;
+}
+
+.market-btn--primary {
+  background: var(--gradient-primary);
+  color: var(--button-text-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.market-btn--primary:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.market-btn--secondary {
+  background: var(--surface);
+  color: var(--color-primary);
+  border-color: rgba(88, 23, 76, 0.16);
+}
+
+.market-btn--secondary:hover {
+  background: rgba(88, 23, 76, 0.04);
+}
+
+.market-btn--ghost {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--neutral-0);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.market-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
