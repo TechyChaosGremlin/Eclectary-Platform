@@ -1,16 +1,7 @@
 import { Link } from 'react-router-dom';
 
+import type { Product } from '../types/product';
 import '../styles/product-card.css';
-
-export interface Product {
-  id: number;
-  title: string;
-  price: number;
-  creator: string;
-  tag: string;
-  rating: number;
-  image: string;
-}
 
 interface ProductCardProps {
   product: Product;
@@ -19,8 +10,8 @@ interface ProductCardProps {
 function ProductCard({ product }: ProductCardProps) {
   return (
     <article className="product-card">
-      <Link className="product-card__image-wrap" to={`/product/${product.id}`} aria-label={product.title}>
-        <img className="product-card__image" src={product.image} alt={product.title} />
+      <Link className="product-card__image-wrap" to={`/product/${product.id}`} aria-label={`View ${product.title}`}>
+        <img className="product-card__image" src={product.image} alt={product.title} loading="lazy" />
       </Link>
 
       <div className="product-card__content">

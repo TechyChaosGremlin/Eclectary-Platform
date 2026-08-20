@@ -1,15 +1,47 @@
+import { useMemo, useState } from 'react';
+
 import Button from '../components/Button';
-import ProductCard, { type Product } from '../components/ProductCard';
+import CategoryCard from '../components/CategoryCard';
+import ProductCard from '../components/ProductCard';
+import Searchbar from '../components/Searchbar';
+import SellerCard from '../components/SellerCard';
+import { sellers } from '../data/sellers';
+import type { Category } from '../types/category';
+import type { Product } from '../types/product';
 
 import '../styles/home.css';
 
-const categories = [
-  'Handmade Ceramics',
-  'Botanical Home',
-  'Astrology Goods',
-  'Witchy Decor',
-  'Self-Care',
-  'Giftable Finds',
+const categories: Category[] = [
+  {
+    id: 'handmade-ceramics',
+    name: 'Handmade Ceramics',
+    image: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'botanical-home',
+    name: 'Botanical Home',
+    image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'astrology-goods',
+    name: 'Astrology Goods',
+    image: 'https://images.unsplash.com/photo-1532968961962-8a0cb3a2d0c7?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'witchy-decor',
+    name: 'Witchy Decor',
+    image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'self-care',
+    name: 'Self-Care',
+    image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'giftable-finds',
+    name: 'Giftable Finds',
+    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=900&q=80',
+  },
 ];
 
 const featuredProducts: Product[] = [
@@ -52,6 +84,34 @@ const featuredProducts: Product[] = [
 ];
 
 function Home() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredProducts = useMemo(() => {
+    const normalized = searchTerm.trim().toLowerCase();
+
+    if (!normalized) {
+      return featuredProducts;
+    }
+
+    return featuredProducts.filter((product) => {
+      const haystack = [product.title, product.creator, product.tag].join(' ').toLowerCase();
+      return haystack.includes(normalized);
+    });
+  }, [searchTerm]);
+
+  const filteredSellers = useMemo(() => {
+    const normalized = searchTerm.trim().toLowerCase();
+
+    if (!normalized) {
+      return sellers;
+    }
+
+    return sellers.filter((seller) => {
+      const haystack = [seller.name, seller.specialty, seller.bio].join(' ').toLowerCase();
+      return haystack.includes(normalized);
+    });
+  }, [searchTerm]);
+
   return (
     <div className="marketplace-home">
       <section className="hero-section">
@@ -61,6 +121,13 @@ function Home() {
           <p className="hero-text">
             Discover original handmade goods, spiritual essentials, and thoughtful gifts from independent creators.
           </p>
+
+          <Searchbar
+            value={searchTerm}
+            onChange={setSearchTerm}
+            onSubmit={setSearchTerm}
+            className="home-search"
+          />
 
           <div className="hero-actions">
             <Button>Shop best sellers</Button>
@@ -96,6 +163,12 @@ function Home() {
         </div>
       </section>
 
+      {searchTerm && (
+        <p className="search-results-summary">
+          {filteredProducts.length + filteredSellers.length} result{filteredProducts.length + filteredSellers.length === 1 ? '' : 's'} for “{searchTerm}”
+        </p>
+      )}
+
       <section className="category-section">
         <div className="section-heading">
           <p className="eyebrow">Browse by vibe</p>
@@ -104,9 +177,7 @@ function Home() {
 
         <div className="category-grid">
           {categories.map((category) => (
-            <div key={category} className="category-pill">
-              {category}
-            </div>
+            <CategoryCard key={category.id} category={category} />
           ))}
         </div>
       </section>
@@ -122,11 +193,44 @@ function Home() {
           </Button>
         </div>
 
-        <div className="products-grid">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        {filteredProducts.length > 0 ? (
+          <div className="products-grid">
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="home-empty-state" aria-live="polite">
+            <h3>No featured products match your search.</h3>
+            <button type="button" className="home-clear-search" onClick={() => setSearchTerm('')}>
+              Clear search
+            </button>
+          </div>
+        )}
+      </section>
+
+      <section className="sellers-section">
+        <div className="section-heading section-heading--row">
+          <div>
+            <p className="eyebrow">Meet the makers</p>
+            <h2>Find a seller by name</h2>
+          </div>
         </div>
+
+        {filteredSellers.length > 0 ? (
+          <div className="sellers-grid">
+            {filteredSellers.map((seller) => (
+              <SellerCard key={seller.id} seller={seller} />
+            ))}
+          </div>
+        ) : (
+          <div className="home-empty-state" aria-live="polite">
+            <h3>No sellers match your search.</h3>
+            <button type="button" className="home-clear-search" onClick={() => setSearchTerm('')}>
+              Clear search
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );

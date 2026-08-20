@@ -106,6 +106,12 @@
   --space-16: 64px;
   --space-20: 80px;
 
+  /* Legacy spacing aliases used by dashboard/seller layouts */
+  --gap-xs: var(--space-1);
+  --gap-sm: var(--space-2);
+  --gap-md: var(--space-4);
+  --gap-lg: var(--space-6);
+
   /* Border radius */
   --radius-sm: 8px;
   --radius-md: 12px;

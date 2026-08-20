@@ -5,8 +5,8 @@
   display: grid;
   grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
   gap: var(--gap-md);
-  width: min(100% - 32px, 1400px);
-  margin: 20px auto;
+  width: min(var(--container-width), calc(100% - var(--content-padding-desktop)));
+  margin: 20px auto 28px;
   align-items: start;
 }
 
@@ -25,5 +25,14 @@
   .seller-layout,
   .dashboard-layout {
     grid-template-columns: 1fr;
+    width: min(var(--container-width-tablet), calc(100% - var(--content-padding-tablet)));
+  }
+}
+
+@media (max-width: 600px) {
+  .seller-layout,
+  .dashboard-layout {
+    width: min(var(--container-width-mobile), calc(100% - var(--content-padding-mobile)));
+    margin: 14px auto 24px;
   }
 }
