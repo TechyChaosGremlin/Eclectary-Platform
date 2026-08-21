@@ -4,4 +4,5 @@ export interface Seller {
   image: string;
   specialty: string;
   bio: string;
+  categories?: string[];
 }

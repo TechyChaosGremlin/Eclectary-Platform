@@ -20,7 +20,7 @@
 
 .seller-card__image-link {
   display: block;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background: var(--sage-100);
 }
@@ -42,8 +42,8 @@
   flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-2);
-  padding: var(--space-5);
+  gap: var(--space-1);
+  padding: var(--space-4);
 }
 
 .seller-card__specialty {
@@ -55,7 +55,7 @@
 
 .seller-card__name {
   color: var(--color-primary);
-  font-size: var(--heading-3-size);
+  font-size: 1.05rem;
 }
 
 .seller-card__bio {
@@ -68,8 +68,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: var(--space-3);
-  padding: 10px 22px;
+  margin-top: var(--space-2);
+  padding: 8px 18px;
   border-radius: var(--radius-pill);
   border: 0;
   color: var(--neutral-0);

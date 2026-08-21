@@ -1,105 +1,49 @@
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import ProductCard from '../components/ProductCard';
 import Searchbar from '../components/Searchbar';
 import SellerCard from '../components/SellerCard';
-import { sellers } from '../data/sellers';
-import type { Product } from '../types/product';
+import { products } from '../data/products';
+import { getSellers } from '../services/sellerApi';
 
 import '../styles/shop.css';
 
-const products: Product[] = [
-  {
-    id: 101,
-    title: 'Amber Glass Tumbler',
-    price: 26,
-    creator: 'Moss Atelier',
-    tag: 'Drinkware',
-    rating: 4.8,
-    image: 'https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 102,
-    title: 'Sage Linen Throw',
-    price: 58,
-    creator: 'Hearth & Thread',
-    tag: 'Textiles',
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 103,
-    title: 'Wildflower Press Set',
-    price: 32,
-    creator: 'Petal Foundry',
-    tag: 'Art',
-    rating: 4.7,
-    image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 104,
-    title: 'Oracle Card Deck',
-    price: 22,
-    creator: 'Moonwell Studio',
-    tag: 'Divination',
-    rating: 5.0,
-    image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 105,
-    title: 'Lavender Bath Ritual',
-    price: 40,
-    creator: 'The Quiet Bloom',
-    tag: 'Self Care',
-    rating: 4.8,
-    image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 106,
-    title: 'Hanging Herb Drying Kit',
-    price: 44,
-    creator: 'Rooted & Co.',
-    tag: 'Kitchen',
-    rating: 4.8,
-    image: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 107,
-    title: 'Whispering Journal',
-    price: 19,
-    creator: 'Ink & Lantern',
-    tag: 'Stationery',
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 108,
-    title: 'Terracotta Candle Trio',
-    price: 36,
-    creator: 'Ember + Fern',
-    tag: 'Home',
-    rating: 4.8,
-    image: 'https://images.unsplash.com/photo-1602872029706-5f3b8d5d7c4f?auto=format&fit=crop&w=900&q=80',
-  },
-];
+const sellers = getSellers();
+
+const collectionNames: Record<string, string> = {
+  'custom-printing': 'Custom Printing',
+  'purely-handmade': 'Purely Handmade',
+  'digital-creations': 'Digital Creations',
+};
 
 function Shop() {
+  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
+  const collection = searchParams.get('collection') ?? '';
+  const collectionName = collectionNames[collection];
 
   const filteredProducts = useMemo(() => {
     const normalized = searchTerm.trim().toLowerCase();
+    const collectionProducts = collection
+      ? products.filter((product) => product.collection === collection)
+      : products;
 
     if (!normalized) {
-      return products;
+      return collectionProducts;
     }
 
-    return products.filter((product) => {
+    return collectionProducts.filter((product) => {
       const haystack = [product.title, product.creator, product.tag].join(' ').toLowerCase();
       return haystack.includes(normalized);
     });
-  }, [searchTerm]);
+  }, [collection, searchTerm]);
 
   const filteredSellers = useMemo(() => {
+    if (collection) {
+      return [];
+    }
+
     const normalized = searchTerm.trim().toLowerCase();
 
     if (!normalized) {
@@ -110,18 +54,18 @@ function Shop() {
       const haystack = [seller.name, seller.specialty, seller.bio].join(' ').toLowerCase();
       return haystack.includes(normalized);
     });
-  }, [searchTerm]);
+  }, [collection, searchTerm]);
 
   return (
     <div className="shop-page">
       <header className="shop-hero">
         <div>
-          <p className="eyebrow">Shop the collection</p>
-          <h1>Find pieces made with intention.</h1>
+          <p className="eyebrow">{collectionName ?? 'Shop the collection'}</p>
+          <h1>{collectionName ?? 'Find pieces made with intention.'}</h1>
         </div>
 
         <div className="shop-summary">
-          <span>{products.length} curated items</span>
+          <span>{filteredProducts.length} curated items</span>
           <span>New arrivals weekly</span>
         </div>
       </header>

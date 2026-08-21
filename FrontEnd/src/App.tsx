@@ -1,10 +1,21 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
 import SellerLayout from "./layouts/SellerLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
+import SellerDetail from "./pages/SellerDetail";
+import ProductDetail from "./pages/ProductDetail";
+import Favorites from "./pages/Favorites";
+import Categories from "./pages/Categories";
+import Category from "./pages/Category";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import ProductCard from "./components/ProductCard";
+import SellerCard from "./components/SellerCard";
+import { products } from "./data/products";
+import { getSellers } from "./services/sellerApi";
 import "./App.css";
 
 function NotFound() {
@@ -21,15 +32,45 @@ function About() {
 }
 
 function SellerHome() {
-  return <div style={{ padding: 24 }}><h2>Seller Portal</h2><p>Seller home.</p></div>
+  const sellers = getSellers();
+
+  return (
+    <section style={{ padding: 24 }}>
+      <h2>Seller Portal</h2>
+      <p>{sellers.length} makers are currently represented in the marketplace.</p>
+      <div className="shop-sellers-grid">
+        {sellers.slice(0, 3).map((seller) => <SellerCard key={seller.id} seller={seller} />)}
+      </div>
+    </section>
+  )
 }
 
 function DashboardOverview() {
-  return <div style={{ padding: 24 }}><h2>Dashboard</h2><p>Overview.</p></div>
+  const totalValue = products.reduce((sum, product) => sum + product.price, 0);
+
+  return (
+    <section style={{ padding: 24 }}>
+      <h2>Dashboard</h2>
+      <p>Marketplace data at a glance.</p>
+      <div style={{ display: "grid", gap: 16, gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", marginTop: 24 }}>
+        <strong>{products.length} products</strong>
+        <strong>{getSellers().length} sellers</strong>
+        <strong>${totalValue.toFixed(2)} catalog value</strong>
+      </div>
+    </section>
+  )
 }
 
 function Products() {
-  return <div style={{ padding: 24 }}><h2>Products</h2><p>Product list.</p></div>
+  return (
+    <section style={{ padding: 24 }}>
+      <h2>Products</h2>
+      <p>{products.length} products from the mock catalog.</p>
+      <div className="shop-grid" style={{ marginTop: 24 }}>
+        {products.map((product) => <ProductCard key={product.id} product={product} />)}
+      </div>
+    </section>
+  )
 }
 
 function AddProduct() {
@@ -44,9 +85,13 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/shop/:id" element={<ShopDetail />} />
+          <Route path="/seller/:id" element={<SellerDetail />} />
+          <Route path="/shop/:id" element={<SellerDetail />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/category/:id" element={<Category />} />
-          <Route path="/product/:id" element={<Product />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/wishlist" element={<Navigate to="/favorites" replace />} />
           <Route path="/about" element={<About />} />
 
           {/* Authentication */}
@@ -81,18 +126,6 @@ function App() {
   )
 }
 
-function ShopDetail() {
-  return <div style={{ padding: 24 }}><h2>Shop</h2><p>Shop detail placeholder.</p></div>
-}
-
-function Category() {
-  return <div style={{ padding: 24 }}><h2>Category</h2><p>Category listing placeholder.</p></div>
-}
-
-function Product() {
-  return <div style={{ padding: 24 }}><h2>Product</h2><p>Product detail placeholder.</p></div>
-}
-
 /* Authentication placeholders */
 function Login() {
   return <div style={{ padding: 24 }}><h2>Login</h2><p>Login form placeholder.</p></div>
@@ -104,15 +137,6 @@ function Register() {
 
 function Profile() {
   return <div style={{ padding: 24 }}><h2>Profile</h2><p>User profile placeholder.</p></div>
-}
-
-/* Shopping placeholders */
-function Cart() {
-  return <div style={{ padding: 24 }}><h2>Cart</h2><p>Your cart.</p></div>
-}
-
-function Checkout() {
-  return <div style={{ padding: 24 }}><h2>Checkout</h2><p>Checkout flow placeholder.</p></div>
 }
 
 function Order() {

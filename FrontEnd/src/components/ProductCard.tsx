@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+import { useWishlist } from '../context/WishlistContext';
 import type { Product } from '../types/product';
 import '../styles/product-card.css';
 
@@ -8,11 +9,26 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product }: ProductCardProps) {
+  const { toggleWishlist, isWishlisted } = useWishlist();
+  const isSaved = isWishlisted(product.id);
+
   return (
     <article className="product-card">
-      <Link className="product-card__image-wrap" to={`/product/${product.id}`} aria-label={`View ${product.title}`}>
-        <img className="product-card__image" src={product.image} alt={product.title} loading="lazy" />
-      </Link>
+      <div className="product-card__image-shell">
+        <Link className="product-card__image-wrap" to={`/product/${product.id}`} aria-label={`View ${product.title}`}>
+          <img className="product-card__image" src={product.image} alt={product.title} loading="lazy" />
+        </Link>
+
+        <button
+          type="button"
+          className={`product-card__wishlist ${isSaved ? 'is-active' : ''}`}
+          onClick={() => toggleWishlist(product.id)}
+          aria-label={isSaved ? `Remove ${product.title} from wishlist` : `Add ${product.title} to wishlist`}
+          title={isSaved ? 'Remove from wishlist' : 'Add to wishlist'}
+        >
+          {isSaved ? '♥' : '♡'}
+        </button>
+      </div>
 
       <div className="product-card__content">
         <div className="product-card__meta">
