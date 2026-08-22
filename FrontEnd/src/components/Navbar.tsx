@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "../styles/navbar.css";
 import logo from "../assets/images/eclectary logo nb.png";
@@ -19,13 +19,8 @@ function hasAuthSession() {
 }
 
 function Navbar() {
-    const location = useLocation();
     const { totalItems } = useCart();
     const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthSession());
-
-    useEffect(() => {
-        setIsLoggedIn(hasAuthSession());
-    }, [location.pathname]);
 
     useEffect(() => {
         const syncAuthState = () => {
@@ -49,7 +44,7 @@ function Navbar() {
 
             <div className="account-actions">
                 <Link
-                    to={isLoggedIn ? "/profile" : "/login"}
+                    to={isLoggedIn ? "/account/profile" : "/account/login"}
                     className="action"
                     title={isLoggedIn ? "Profile" : "Login"}
                     aria-label={isLoggedIn ? "Profile" : "Login"}

@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
 import SellerLayout from "./layouts/SellerLayout";
@@ -13,6 +13,8 @@ import Category from "./pages/Category";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 import ProductCard from "./components/ProductCard";
 import SellerCard from "./components/SellerCard";
 import { products } from "./data/products";
@@ -78,6 +80,15 @@ function AddProduct() {
   return <div style={{ padding: 24 }}><h2>Add Product</h2><p>New product form placeholder.</p></div>
 }
 
+function AccountIndex() {
+  const hasSession = Boolean(
+    window.localStorage.getItem("eclectary-auth")
+    || window.sessionStorage.getItem("eclectary-auth"),
+  );
+
+  return <Navigate to={hasSession ? "/account/profile" : "/account/login"} replace />;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -96,9 +107,15 @@ function App() {
           <Route path="/about" element={<About />} />
 
           {/* Authentication */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/account" element={<AccountIndex />} />
+          <Route path="/account/login" element={<Login />} />
+          <Route path="/account/register" element={<Register />} />
+          <Route path="/account/profile" element={<Profile />} />
+
+          {/* Backward-compatible auth redirects */}
+          <Route path="/login" element={<Navigate to="/account/login" replace />} />
+          <Route path="/register" element={<Navigate to="/account/register" replace />} />
+          <Route path="/profile" element={<Navigate to="/account/profile" replace />} />
 
           {/* Shopping */}
           <Route path="/cart" element={<Cart />} />
@@ -124,44 +141,6 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
-  )
-}
-
-function Register() {
-  return <div style={{ padding: 24 }}><h2>Register</h2><p>Registration form placeholder.</p></div>
-}
-
-function Profile() {
-  const navigate = useNavigate();
-
-  function handleLogout() {
-    window.localStorage.removeItem("eclectary-auth");
-    window.sessionStorage.removeItem("eclectary-auth");
-    window.dispatchEvent(new Event("eclectary-auth-change"));
-    navigate("/");
-  }
-
-  return (
-    <div style={{ padding: 24, display: "grid", gap: 14, maxWidth: 560 }}>
-      <h2 style={{ margin: 0 }}>Profile</h2>
-      <p style={{ margin: 0 }}>Signed in to Eclectary.</p>
-      <button
-        type="button"
-        onClick={handleLogout}
-        style={{
-          width: "fit-content",
-          border: "none",
-          borderRadius: 999,
-          background: "linear-gradient(135deg, #58174c, #a14d76)",
-          color: "#fff",
-          fontWeight: 700,
-          padding: "10px 16px",
-          cursor: "pointer",
-        }}
-      >
-        Logout
-      </button>
-    </div>
   )
 }
 

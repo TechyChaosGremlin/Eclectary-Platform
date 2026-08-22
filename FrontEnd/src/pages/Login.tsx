@@ -123,7 +123,7 @@ function Login() {
           </form>
 
           <p className="login-signup">
-            New to Eclectary? <Link to="/register">Create an account</Link>
+            New to Eclectary? <Link to="/account/register">Create an account</Link>
           </p>
         </div>
 

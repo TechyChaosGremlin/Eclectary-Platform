@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 type WishlistContextValue = {
@@ -7,8 +8,9 @@ type WishlistContextValue = {
   clearWishlist: () => void;
 };
 
-const WISHLIST_STORAGE_KEY = 'eclectary-wishlist';
 const WishlistContext = createContext<WishlistContextValue | undefined>(undefined);
+
+const WISHLIST_STORAGE_KEY = 'eclectary-wishlist';
 
 function readStoredWishlist(): number[] {
   if (typeof window === 'undefined') {

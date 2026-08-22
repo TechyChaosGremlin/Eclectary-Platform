@@ -80,7 +80,7 @@ function Home() {
 
           <div className="home-bottom-nav__actions">
             <Link
-              to={isLoggedIn ? '/profile' : '/login'}
+              to={isLoggedIn ? '/account/profile' : '/account/login'}
               className="home-bottom-nav__action"
               title={isLoggedIn ? 'Profile' : 'Login'}
               aria-label={isLoggedIn ? 'Profile' : 'Login'}

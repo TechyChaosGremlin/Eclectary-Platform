@@ -133,7 +133,7 @@ function Shop() {
               </Link>
 
               <Link
-                to={isLoggedIn ? '/profile' : '/login'}
+                to={isLoggedIn ? '/account/profile' : '/account/login'}
                 className="shop-collection-nav__action"
                 title={isLoggedIn ? 'Profile' : 'Login'}
                 aria-label={isLoggedIn ? 'Profile' : 'Login'}
