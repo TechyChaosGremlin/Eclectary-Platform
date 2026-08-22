@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route, useNavigate } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
 import SellerLayout from "./layouts/SellerLayout";
@@ -12,6 +12,7 @@ import Categories from "./pages/Categories";
 import Category from "./pages/Category";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Login from "./pages/Login";
 import ProductCard from "./components/ProductCard";
 import SellerCard from "./components/SellerCard";
 import { products } from "./data/products";
@@ -126,17 +127,42 @@ function App() {
   )
 }
 
-/* Authentication placeholders */
-function Login() {
-  return <div style={{ padding: 24 }}><h2>Login</h2><p>Login form placeholder.</p></div>
-}
-
 function Register() {
   return <div style={{ padding: 24 }}><h2>Register</h2><p>Registration form placeholder.</p></div>
 }
 
 function Profile() {
-  return <div style={{ padding: 24 }}><h2>Profile</h2><p>User profile placeholder.</p></div>
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    window.localStorage.removeItem("eclectary-auth");
+    window.sessionStorage.removeItem("eclectary-auth");
+    window.dispatchEvent(new Event("eclectary-auth-change"));
+    navigate("/");
+  }
+
+  return (
+    <div style={{ padding: 24, display: "grid", gap: 14, maxWidth: 560 }}>
+      <h2 style={{ margin: 0 }}>Profile</h2>
+      <p style={{ margin: 0 }}>Signed in to Eclectary.</p>
+      <button
+        type="button"
+        onClick={handleLogout}
+        style={{
+          width: "fit-content",
+          border: "none",
+          borderRadius: 999,
+          background: "linear-gradient(135deg, #58174c, #a14d76)",
+          color: "#fff",
+          fontWeight: 700,
+          padding: "10px 16px",
+          cursor: "pointer",
+        }}
+      >
+        Logout
+      </button>
+    </div>
+  )
 }
 
 function Order() {

@@ -4,10 +4,11 @@ import Footer from "../components/Footer";
 
 function MainLayout() {
   const location = useLocation();
+  const isHome = location.pathname === "/";
 
   return (
     <div className="app-layout">
-      <Navbar />
+      {!isHome && <Navbar />}
       <main className="page-content" role="main">
         <Outlet />
       </main>

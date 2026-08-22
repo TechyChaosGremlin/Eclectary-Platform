@@ -1,9 +1,14 @@
-import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import ProductCard from '../components/ProductCard';
 import Searchbar from '../components/Searchbar';
 import SellerCard from '../components/SellerCard';
+import customPrinting from '../assets/images/custom-printing.png';
+import digitalCreations from '../assets/images/digital-creations.png';
+import purelyHandmade from '../assets/images/purely-handmade.png';
+import logo from '../assets/images/eclectary logo nb.png';
+import { useCart } from '../context/CartContext';
 import { products } from '../data/products';
 import { getSellers } from '../services/sellerApi';
 
@@ -17,11 +22,47 @@ const collectionNames: Record<string, string> = {
   'digital-creations': 'Digital Creations',
 };
 
+const collectionImages: Record<string, string> = {
+  'custom-printing': customPrinting,
+  'purely-handmade': purelyHandmade,
+  'digital-creations': digitalCreations,
+};
+
+const AUTH_STORAGE_KEY = 'eclectary-auth';
+const AUTH_EVENT_NAME = 'eclectary-auth-change';
+
+function hasAuthSession() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  return Boolean(
+    window.localStorage.getItem(AUTH_STORAGE_KEY)
+    || window.sessionStorage.getItem(AUTH_STORAGE_KEY),
+  );
+}
+
 function Shop() {
+  const { totalItems } = useCart();
   const [searchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState('');
+  const initialSearchTerm = searchParams.get('search') ?? '';
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthSession());
   const collection = searchParams.get('collection') ?? '';
   const collectionName = collectionNames[collection];
+  const collectionImage = collectionImages[collection];
+
+  useEffect(() => {
+    const syncAuthState = () => setIsLoggedIn(hasAuthSession());
+
+    window.addEventListener('storage', syncAuthState);
+    window.addEventListener(AUTH_EVENT_NAME, syncAuthState);
+
+    return () => {
+      window.removeEventListener('storage', syncAuthState);
+      window.removeEventListener(AUTH_EVENT_NAME, syncAuthState);
+    };
+  }, []);
 
   const filteredProducts = useMemo(() => {
     const normalized = searchTerm.trim().toLowerCase();
@@ -58,6 +99,65 @@ function Shop() {
 
   return (
     <div className="shop-page">
+      {collectionName && collectionImage && (
+        <section className="shop-collection-nav" aria-label={`${collectionName} collection navigation`}>
+          <Link className="shop-collection-nav__image-link" to={`/shop?collection=${collection}`}>
+            <img src={collectionImage} alt={collectionName} />
+          </Link>
+
+          <div className="shop-collection-nav__bottom" aria-label={`${collectionName} quick navigation`}>
+            <Link className="shop-collection-nav__brand" to="/" aria-label="Eclectary home">
+              <img src={logo} alt="Eclectary" />
+            </Link>
+
+            <label className="shop-collection-nav__search">
+              <span className="shop-collection-nav__search-icon" aria-hidden="true">✦</span>
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search creations, creators, ideas..."
+                aria-label="Search creations, creators, ideas"
+              />
+            </label>
+
+            <div className="shop-collection-nav__actions">
+              <Link
+                to={`/shop?collection=${collection}`}
+                className="shop-collection-nav__action shop-collection-nav__action--collection"
+                title={`Explore ${collectionName}`}
+                aria-label={`Explore ${collectionName}`}
+              >
+                <span aria-hidden="true">✶</span>
+                <span>{collectionName}</span>
+              </Link>
+
+              <Link
+                to={isLoggedIn ? '/profile' : '/login'}
+                className="shop-collection-nav__action"
+                title={isLoggedIn ? 'Profile' : 'Login'}
+                aria-label={isLoggedIn ? 'Profile' : 'Login'}
+              >
+                <span aria-hidden="true">♙</span>
+                <span>{isLoggedIn ? 'Profile' : 'Login'}</span>
+              </Link>
+
+              {isLoggedIn && (
+                <Link to="/favorites" className="shop-collection-nav__action" title="Favorites" aria-label="Favorites">
+                  <span aria-hidden="true">♡</span>
+                  <span>Favorites</span>
+                </Link>
+              )}
+
+              <Link to="/cart" className="shop-collection-nav__action" title="Cart" aria-label="Cart">
+                <span aria-hidden="true">🛒</span>
+                <span>{totalItems > 0 ? `Cart (${totalItems})` : 'Cart'}</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       <header className="shop-hero">
         <div>
           <p className="eyebrow">{collectionName ?? 'Shop the collection'}</p>
@@ -70,12 +170,14 @@ function Shop() {
         </div>
       </header>
 
-      <Searchbar
-        value={searchTerm}
-        onChange={setSearchTerm}
-        onSubmit={setSearchTerm}
-        className="shop-search"
-      />
+      {!collection && (
+        <Searchbar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          onSubmit={setSearchTerm}
+          className="shop-search"
+        />
+      )}
 
       {searchTerm && (
         <p className="shop-results-summary">
