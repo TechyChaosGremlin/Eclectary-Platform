@@ -160,7 +160,7 @@
 }
 
 .sellers-intro {
-  max-width: 580px;
+  max-width: none;
   margin: 4px 0 0;
   color: var(--color-muted);
   font: var(--text-body);
@@ -297,7 +297,7 @@
 
 /* Legacy Eclectary landing page */
 .legacy-home {
-  --legacy-rail-width: min(calc(100% - 64px), 1240px);
+  --legacy-rail-width: min(calc(100% - 40px), 1280px);
   padding-bottom: 56px;
   background: #F3EFE5;
 }
@@ -306,7 +306,7 @@
   display: grid;
   grid-template-columns: 1fr 1.5fr 1fr;
   gap: 16px;
-  width: min(calc(100% - 64px), 980px);
+  width: min(calc(100% - 40px), 1100px);
   aspect-ratio: 2.9 / 1;
   margin: -10px auto 0;
   background: var(--bg);
@@ -349,7 +349,7 @@
   grid-template-columns: minmax(150px, 190px) minmax(320px, 1fr) auto;
   align-items: center;
   gap: 10px;
-  width: min(calc(100% - 64px), 1240px);
+  width: min(calc(100% - 40px), 1280px);
   padding: 8px 12px;
   background: transparent;
 }

@@ -21,11 +21,11 @@
 }
 
 :root {
-  --container-width: 1200px;
-  --container-width-tablet: 960px;
+  --container-width: 1440px;
+  --container-width-tablet: 1200px;
   --container-width-mobile: 100%;
-  --content-padding-desktop: 32px;
-  --content-padding-tablet: 24px;
+  --content-padding-desktop: 24px;
+  --content-padding-tablet: 18px;
   --content-padding-mobile: 16px;
   --breakpoint-tablet: 900px;
   --breakpoint-mobile: 600px;
