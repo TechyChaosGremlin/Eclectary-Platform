@@ -32,7 +32,6 @@ function Cart() {
 		<section className="cart-page">
 			<div className="cart-page__header">
 				<div>
-					<p className="eyebrow">Your collection</p>
 					<h1>Cart</h1>
 				</div>
 				<p className="cart-page__count">{cartProducts.length} {cartProducts.length === 1 ? 'item' : 'items'}</p>

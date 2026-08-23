@@ -37,6 +37,11 @@ function Category() {
         <div className="category-detail__copy">
           <p className="eyebrow">Marketplace category</p>
           <h1>{category.name}</h1>
+          {Boolean(category.childSubcategories?.length) && (
+            <p className="category-detail__subcategories">
+              Child categories: {category.childSubcategories.join(', ')}
+            </p>
+          )}
           <p className="category-detail__count">
             {categoryProducts.length} item{categoryProducts.length === 1 ? '' : 's'}
           </p>

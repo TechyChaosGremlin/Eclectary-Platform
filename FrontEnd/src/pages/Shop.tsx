@@ -4,9 +4,6 @@ import { Link, useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import Searchbar from '../components/Searchbar';
 import SellerCard from '../components/SellerCard';
-import customPrinting from '../assets/images/custom-printing.png';
-import digitalCreations from '../assets/images/digital-creations.png';
-import purelyHandmade from '../assets/images/purely-handmade.png';
 import logo from '../assets/images/eclectary logo nb.png';
 import { useCart } from '../context/CartContext';
 import { products } from '../data/products';
@@ -20,12 +17,6 @@ const collectionNames: Record<string, string> = {
   'custom-printing': 'Custom Printing',
   'purely-handmade': 'Purely Handmade',
   'digital-creations': 'Digital Creations',
-};
-
-const collectionImages: Record<string, string> = {
-  'custom-printing': customPrinting,
-  'purely-handmade': purelyHandmade,
-  'digital-creations': digitalCreations,
 };
 
 const AUTH_STORAGE_KEY = 'eclectary-auth';
@@ -50,7 +41,6 @@ function Shop() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthSession());
   const collection = searchParams.get('collection') ?? '';
   const collectionName = collectionNames[collection];
-  const collectionImage = collectionImages[collection];
 
   useEffect(() => {
     const syncAuthState = () => setIsLoggedIn(hasAuthSession());
@@ -99,12 +89,8 @@ function Shop() {
 
   return (
     <div className="shop-page">
-      {collectionName && collectionImage && (
+      {collectionName && (
         <section className="shop-collection-nav" aria-label={`${collectionName} collection navigation`}>
-          <Link className="shop-collection-nav__image-link" to={`/shop?collection=${collection}`}>
-            <img src={collectionImage} alt={collectionName} />
-          </Link>
-
           <div className="shop-collection-nav__bottom" aria-label={`${collectionName} quick navigation`}>
             <Link className="shop-collection-nav__brand" to="/" aria-label="Eclectary home">
               <img src={logo} alt="Eclectary" />
@@ -160,13 +146,8 @@ function Shop() {
 
       <header className="shop-hero">
         <div>
-          <p className="eyebrow">{collectionName ?? 'Shop the collection'}</p>
+          {!collectionName && <p className="eyebrow">Shop the collection</p>}
           <h1>{collectionName ?? 'Find pieces made with intention.'}</h1>
-        </div>
-
-        <div className="shop-summary">
-          <span>{filteredProducts.length} curated items</span>
-          <span>New arrivals weekly</span>
         </div>
       </header>
 

@@ -53,6 +53,13 @@
   font-size: clamp(2rem, 5vw, 3.5rem);
 }
 
+.category-detail__subcategories {
+  max-width: 60ch;
+  margin: 0 0 var(--space-2);
+  color: rgba(255, 255, 255, 0.92);
+  font: var(--text-body);
+}
+
 .category-detail__count {
   margin: 0;
   color: var(--neutral-0);

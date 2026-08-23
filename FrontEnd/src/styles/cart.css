@@ -14,6 +14,7 @@
 
 .cart-page__header h1 {
   margin-top: var(--space-2);
+  font-size: clamp(2rem, 4.2vw, 2.85rem);
 }
 
 .cart-page__count {
@@ -74,12 +75,13 @@
 }
 
 .cart-item__details h2 {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .cart-item__details p,
 .cart-item__details span {
   color: var(--neutral-700);
+  font-size: 0.95rem;
 }
 
 .cart-item__quantity {
@@ -133,7 +135,7 @@
 
 .cart-item__actions strong {
   color: var(--neutral-900);
-  font-size: 1.05rem;
+  font-size: 1rem;
 }
 
 .cart-item__actions button {
@@ -152,7 +154,7 @@
 }
 
 .cart-summary h2 {
-  font-size: 1.45rem;
+  font-size: 1.3rem;
 }
 
 .cart-summary__row {

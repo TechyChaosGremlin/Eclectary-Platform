@@ -9,6 +9,9 @@ import logo from '../assets/images/eclectary logo nb.png';
 import SellerCard from '../components/SellerCard';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import CategoryCard from '../components/CategoryCard';
+import { categories } from '../data/categories';
 import { products } from '../data/products';
 import { getSellers } from '../services/sellerApi';
 
@@ -30,10 +33,19 @@ function hasAuthSession() {
 }
 
 function Home() {
-  const { totalItems } = useCart();
+  const { items: cartItems, totalItems } = useCart();
+  const { ids: wishlistIds } = useWishlist();
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthSession());
   const normalizedSearch = searchTerm.trim().toLowerCase();
+  const engagedProductIds = [...wishlistIds, ...cartItems.map((item) => item.productId)];
+  const engagedProducts = products.filter((product) => engagedProductIds.includes(product.id));
+  const recommendationCategories = new Set(engagedProducts.map((product) => product.category));
+  const trendingProducts = [...products].sort((first, second) => second.rating - first.rating).slice(0, 4);
+  const recommendedProducts = (engagedProducts.length > 0
+    ? products.filter((product) => recommendationCategories.has(product.category) && !engagedProductIds.includes(product.id))
+    : products.slice(4, 8)
+  ).slice(0, 4);
 
   useEffect(() => {
     const syncAuthState = () => setIsLoggedIn(hasAuthSession());
@@ -120,6 +132,45 @@ function Home() {
 
       <section className="legacy-hero-banner" aria-label="Eclectary introduction">
         <img src={heroBanner} alt="Find what calls to you and discover creations made with passion." />
+      </section>
+
+      <section className="home-market-section" aria-labelledby="trending-heading">
+        <div className="home-section-heading">
+          <div>
+            <p className="home-section-kicker">Popular right now</p>
+            <h2 id="trending-heading">Trending now</h2>
+          </div>
+          <Link to="/shop" className="home-section-link">See all <span aria-hidden="true">→</span></Link>
+        </div>
+        <div className="home-product-grid">
+          {trendingProducts.map((product) => <ProductCard key={product.id} product={product} />)}
+        </div>
+      </section>
+
+      <section className="home-market-section home-category-section" aria-labelledby="categories-heading">
+        <div className="home-section-heading">
+          <div>
+            <p className="home-section-kicker">Find your next favorite</p>
+            <h2 id="categories-heading">Shop by category</h2>
+          </div>
+          <Link to="/categories" className="home-section-link">Browse categories <span aria-hidden="true">→</span></Link>
+        </div>
+        <div className="home-category-grid">
+          {categories.map((category) => <CategoryCard key={category.id} category={category} />)}
+        </div>
+      </section>
+
+      <section className="home-market-section home-recommendation-section" aria-labelledby="recommendations-heading">
+        <div className="home-section-heading">
+          <div>
+            <p className="home-section-kicker">A little inspiration</p>
+            <h2 id="recommendations-heading">Picked for you</h2>
+          </div>
+          <Link to="/shop" className="home-section-link">Explore more <span aria-hidden="true">→</span></Link>
+        </div>
+        <div className="home-product-grid">
+          {recommendedProducts.map((product) => <ProductCard key={product.id} product={product} />)}
+        </div>
       </section>
 
       <section className="makers-section">

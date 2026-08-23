@@ -17,7 +17,14 @@ function Categories() {
       return categories;
     }
 
-    return categories.filter((category) => category.name.toLowerCase().includes(normalized));
+    return categories.filter((category) => {
+      const categoryNameMatch = category.name.toLowerCase().includes(normalized);
+      const childCategoryMatch = category.childSubcategories?.some((child) =>
+        child.toLowerCase().includes(normalized),
+      );
+
+      return categoryNameMatch || Boolean(childCategoryMatch);
+    });
   }, [searchTerm]);
 
   return (
@@ -41,7 +48,7 @@ function Categories() {
         value={searchTerm}
         onChange={setSearchTerm}
         onSubmit={setSearchTerm}
-        placeholder="Search categories like ceramics, astrology, or self-care"
+        placeholder="Search categories like apothecary, pendulums, or divination"
         className="categories-search"
       />
 
@@ -64,7 +71,7 @@ function Categories() {
       ) : (
         <div className="categories-empty-state" aria-live="polite">
           <h2>No categories match your search.</h2>
-          <p>Try another keyword like “ceramics,” “astrology,” or “self-care.”</p>
+          <p>Try another keyword like "apothecary," "altar," or "divination."</p>
           <button type="button" className="categories-clear-search" onClick={() => setSearchTerm('')}>
             Clear search
           </button>
