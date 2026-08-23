@@ -39,7 +39,7 @@ function Category() {
           <h1>{category.name}</h1>
           {Boolean(category.childSubcategories?.length) && (
             <p className="category-detail__subcategories">
-              Child categories: {category.childSubcategories.join(', ')}
+              Child categories: {category.childSubcategories?.join(', ')}
             </p>
           )}
           <p className="category-detail__count">
