@@ -145,6 +145,108 @@
   margin-bottom: 12px;
 }
 
+.shop-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.shop-sidebar {
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 20px 18px;
+  border: 1px solid var(--border-aura);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.shop-sidebar__section + .shop-sidebar__section {
+  padding-top: 22px;
+  border-top: 1px solid var(--border-aura);
+}
+
+.shop-sidebar__heading {
+  margin: 0 0 12px;
+  color: var(--color-primary);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.shop-sidebar__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.shop-sidebar__link {
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  font: var(--text-nav);
+  padding: 7px 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.shop-sidebar__link:hover,
+.shop-sidebar__link:focus-visible {
+  background: rgba(88, 23, 76, 0.08);
+  color: var(--color-primary);
+}
+
+.shop-sidebar__link--active {
+  background: var(--color-primary);
+  color: var(--neutral-0);
+  font-weight: 700;
+}
+
+.shop-sidebar__link:focus-visible {
+  outline: 2px solid var(--color-primary-2);
+  outline-offset: 2px;
+}
+
+.shop-sidebar__clear {
+  border: 1px solid var(--border-aura);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  font: var(--text-nav);
+  padding: 8px 12px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.shop-sidebar__clear:hover,
+.shop-sidebar__clear:focus-visible {
+  background: var(--color-primary);
+  color: var(--neutral-0);
+}
+
+.shop-main {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .shop-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .shop-sidebar {
+    position: static;
+  }
+}
+
 .shop-intentions {
   margin: 28px 0 30px;
   padding: 28px 0 4px;

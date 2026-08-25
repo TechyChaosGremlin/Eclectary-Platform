@@ -3,4 +3,5 @@ export interface Category {
   name: string;
   image: string;
   childSubcategories?: string[];
+  collection?: 'custom-printing' | 'purely-handmade' | 'digital-creations';
 }

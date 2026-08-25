@@ -8,11 +8,19 @@ import logo from '../assets/images/eclectary logo nb.png';
 import { useCart } from '../context/CartContext';
 import { products } from '../data/products';
 import { intentions } from '../data/intentions';
+import { categories } from '../data/categories';
 import { getSellers } from '../services/sellerApi';
 
 import '../styles/shop.css';
 
 const sellers = getSellers();
+
+const PRICE_BUCKETS: Array<{ id: string; label: string; min: number; max?: number }> = [
+  { id: 'under-25', label: 'Under $25', min: 0, max: 25 },
+  { id: '25-50', label: '$25 to $50', min: 25, max: 50 },
+  { id: '50-100', label: '$50 to $100', min: 50, max: 100 },
+  { id: 'over-100', label: 'Over $100', min: 100 },
+];
 
 const collectionNames: Record<string, string> = {
   'custom-printing': 'Custom Printing',
@@ -46,17 +54,34 @@ function Shop() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthSession());
   const collection = searchParams.get('collection') ?? '';
   const intention = searchParams.get('intention') ?? '';
+  const category = searchParams.get('category') ?? '';
+  const priceBucket = searchParams.get('price') ?? '';
   const collectionName = collectionNames[collection];
+  const departmentCategories = collection
+    ? categories.filter((item) => item.collection === collection)
+    : [];
 
-  const selectIntention = (nextIntention: string) => {
+  const setFilterParam = (key: string, nextValue: string) => {
     const nextParams = new URLSearchParams(searchParams);
 
-    if (nextIntention) {
-      nextParams.set('intention', nextIntention);
+    if (nextValue) {
+      nextParams.set(key, nextValue);
     } else {
-      nextParams.delete('intention');
+      nextParams.delete(key);
     }
 
+    setSearchParams(nextParams);
+  };
+
+  const selectIntention = (nextIntention: string) => setFilterParam('intention', nextIntention);
+  const selectCategory = (nextCategory: string) => setFilterParam('category', nextCategory);
+  const selectPrice = (nextPrice: string) => setFilterParam('price', nextPrice);
+
+  const clearDepartmentFilters = () => {
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('intention');
+    nextParams.delete('category');
+    nextParams.delete('price');
     setSearchParams(nextParams);
   };
 
@@ -72,24 +97,35 @@ function Shop() {
     };
   }, []);
 
+  const activePriceBucket = PRICE_BUCKETS.find((bucket) => bucket.id === priceBucket);
+
   const filteredProducts = useMemo(() => {
     const normalized = searchTerm.trim().toLowerCase();
     const collectionProducts = collection
       ? products.filter((product) => product.collection === collection)
       : products;
-    const intentionProducts = intention
-      ? collectionProducts.filter((product) => product.intentions?.includes(intention))
+    const categoryProducts = category
+      ? collectionProducts.filter((product) => product.category === category)
       : collectionProducts;
+    const intentionProducts = intention
+      ? categoryProducts.filter((product) => product.intentions?.includes(intention))
+      : categoryProducts;
+    const priceProducts = activePriceBucket
+      ? intentionProducts.filter((product) => (
+        product.price >= activePriceBucket.min
+        && (activePriceBucket.max === undefined || product.price < activePriceBucket.max)
+      ))
+      : intentionProducts;
 
     if (!normalized) {
-      return intentionProducts;
+      return priceProducts;
     }
 
-    return intentionProducts.filter((product) => {
+    return priceProducts.filter((product) => {
       const haystack = [product.title, product.creator, product.tag].join(' ').toLowerCase();
       return haystack.includes(normalized);
     });
-  }, [collection, intention, searchTerm]);
+  }, [activePriceBucket, category, collection, intention, searchTerm]);
 
   const filteredSellers = useMemo(() => {
     if (collection) {
@@ -182,56 +218,184 @@ function Shop() {
         />
       )}
 
-      <section className="shop-intentions" aria-labelledby="shop-intentions-heading">
-        <div className="section-heading">
-          <p className="eyebrow">Shop by intention</p>
-          <h2 id="shop-intentions-heading">Find what calls to you.</h2>
-        </div>
-        <div className="shop-intentions__list" role="group" aria-label="Filter products by intention">
-          <button
-            type="button"
-            className={`shop-intention${!intention ? ' shop-intention--active' : ''}`}
-            aria-pressed={!intention}
-            onClick={() => selectIntention('')}
-          >
-            All intentions
-          </button>
-          {intentions.map((availableIntention) => (
-            <button
-              key={availableIntention}
-              type="button"
-              className={`shop-intention${intention === availableIntention ? ' shop-intention--active' : ''}`}
-              aria-pressed={intention === availableIntention}
-              onClick={() => selectIntention(availableIntention)}
-            >
-              {availableIntention}
-            </button>
-          ))}
-        </div>
-      </section>
+      {collectionName ? (
+        <div className="shop-layout">
+          <aside className="shop-sidebar" aria-label={`${collectionName} filters`}>
+            {departmentCategories.length > 0 && (
+              <div className="shop-sidebar__section">
+                <h3 className="shop-sidebar__heading">Categories</h3>
+                <ul className="shop-sidebar__list">
+                  <li>
+                    <button
+                      type="button"
+                      className={`shop-sidebar__link${!category ? ' shop-sidebar__link--active' : ''}`}
+                      aria-pressed={!category}
+                      onClick={() => selectCategory('')}
+                    >
+                      All categories
+                    </button>
+                  </li>
+                  {departmentCategories.map((departmentCategory) => (
+                    <li key={departmentCategory.id}>
+                      <button
+                        type="button"
+                        className={`shop-sidebar__link${category === departmentCategory.id ? ' shop-sidebar__link--active' : ''}`}
+                        aria-pressed={category === departmentCategory.id}
+                        onClick={() => selectCategory(departmentCategory.id)}
+                      >
+                        {departmentCategory.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-      {(searchTerm || intention) && (
-        <p className="shop-results-summary">
-          {filteredProducts.length + filteredSellers.length} result{filteredProducts.length + filteredSellers.length === 1 ? '' : 's'}
-          {searchTerm && ` for “${searchTerm}”`}
-          {intention && ` with the intention “${intention}”`}
-        </p>
-      )}
+            <div className="shop-sidebar__section">
+              <h3 className="shop-sidebar__heading">Shop by intention</h3>
+              <ul className="shop-sidebar__list">
+                <li>
+                  <button
+                    type="button"
+                    className={`shop-sidebar__link${!intention ? ' shop-sidebar__link--active' : ''}`}
+                    aria-pressed={!intention}
+                    onClick={() => selectIntention('')}
+                  >
+                    All intentions
+                  </button>
+                </li>
+                {intentions.map((availableIntention) => (
+                  <li key={availableIntention}>
+                    <button
+                      type="button"
+                      className={`shop-sidebar__link${intention === availableIntention ? ' shop-sidebar__link--active' : ''}`}
+                      aria-pressed={intention === availableIntention}
+                      onClick={() => selectIntention(availableIntention)}
+                    >
+                      {availableIntention}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-      {filteredProducts.length > 0 ? (
-        <section className="shop-grid" aria-label="Shop products">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </section>
+            <div className="shop-sidebar__section">
+              <h3 className="shop-sidebar__heading">Price</h3>
+              <ul className="shop-sidebar__list">
+                <li>
+                  <button
+                    type="button"
+                    className={`shop-sidebar__link${!priceBucket ? ' shop-sidebar__link--active' : ''}`}
+                    aria-pressed={!priceBucket}
+                    onClick={() => selectPrice('')}
+                  >
+                    Any price
+                  </button>
+                </li>
+                {PRICE_BUCKETS.map((bucket) => (
+                  <li key={bucket.id}>
+                    <button
+                      type="button"
+                      className={`shop-sidebar__link${priceBucket === bucket.id ? ' shop-sidebar__link--active' : ''}`}
+                      aria-pressed={priceBucket === bucket.id}
+                      onClick={() => selectPrice(bucket.id)}
+                    >
+                      {bucket.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {(intention || category || priceBucket) && (
+              <button type="button" className="shop-sidebar__clear" onClick={clearDepartmentFilters}>
+                Clear all filters
+              </button>
+            )}
+          </aside>
+
+          <div className="shop-main">
+            {(searchTerm || intention || category || priceBucket) && (
+              <p className="shop-results-summary">
+                {filteredProducts.length} result{filteredProducts.length === 1 ? '' : 's'}
+                {searchTerm && ` for “${searchTerm}”`}
+                {intention && ` with the intention “${intention}”`}
+                {category && ` in “${departmentCategories.find((item) => item.id === category)?.name ?? category}”`}
+                {activePriceBucket && ` priced ${activePriceBucket.label.toLowerCase()}`}
+              </p>
+            )}
+
+            {filteredProducts.length > 0 ? (
+              <section className="shop-grid" aria-label="Shop products">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </section>
+            ) : (
+              <div className="shop-empty-state" aria-live="polite">
+                <h2>No products match these filters.</h2>
+                <p>Try clearing a filter or searching a different keyword.</p>
+                <button type="button" className="shop-clear-search" onClick={clearDepartmentFilters}>
+                  Clear filters
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       ) : (
-        <div className="shop-empty-state" aria-live="polite">
-          <h2>No products match your search.</h2>
-          <p>Try another keyword like “ceramics,” “journal,” or “moss.”</p>
-          <button type="button" className="shop-clear-search" onClick={() => setSearchTerm('')}>
-            Clear search
-          </button>
-        </div>
+        <>
+          <section className="shop-intentions" aria-labelledby="shop-intentions-heading">
+            <div className="section-heading">
+              <p className="eyebrow">Shop by intention</p>
+              <h2 id="shop-intentions-heading">Find what calls to you.</h2>
+            </div>
+            <div className="shop-intentions__list" role="group" aria-label="Filter products by intention">
+              <button
+                type="button"
+                className={`shop-intention${!intention ? ' shop-intention--active' : ''}`}
+                aria-pressed={!intention}
+                onClick={() => selectIntention('')}
+              >
+                All intentions
+              </button>
+              {intentions.map((availableIntention) => (
+                <button
+                  key={availableIntention}
+                  type="button"
+                  className={`shop-intention${intention === availableIntention ? ' shop-intention--active' : ''}`}
+                  aria-pressed={intention === availableIntention}
+                  onClick={() => selectIntention(availableIntention)}
+                >
+                  {availableIntention}
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {(searchTerm || intention) && (
+            <p className="shop-results-summary">
+              {filteredProducts.length + filteredSellers.length} result{filteredProducts.length + filteredSellers.length === 1 ? '' : 's'}
+              {searchTerm && ` for “${searchTerm}”`}
+              {intention && ` with the intention “${intention}”`}
+            </p>
+          )}
+
+          {filteredProducts.length > 0 ? (
+            <section className="shop-grid" aria-label="Shop products">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </section>
+          ) : (
+            <div className="shop-empty-state" aria-live="polite">
+              <h2>No products match your search.</h2>
+              <p>Try another keyword like “ceramics,” “journal,” or “moss.”</p>
+              <button type="button" className="shop-clear-search" onClick={() => setSearchTerm('')}>
+                Clear search
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {filteredSellers.length > 0 && (
