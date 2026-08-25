@@ -22,6 +22,14 @@ const PRICE_BUCKETS: Array<{ id: string; label: string; min: number; max?: numbe
   { id: 'over-100', label: 'Over $100', min: 100 },
 ];
 
+const SORT_OPTIONS: Array<{ id: string; label: string }> = [
+  { id: '', label: 'Recommended' },
+  { id: 'price-asc', label: 'Price: Low to High' },
+  { id: 'price-desc', label: 'Price: High to Low' },
+  { id: 'rating-desc', label: 'Top Rated' },
+  { id: 'newest', label: 'Newest' },
+];
+
 const collectionNames: Record<string, string> = {
   'custom-printing': 'Custom Printing',
   'purely-handmade': 'Purely Handmade',
@@ -56,6 +64,7 @@ function Shop() {
   const intention = searchParams.get('intention') ?? '';
   const category = searchParams.get('category') ?? '';
   const priceBucket = searchParams.get('price') ?? '';
+  const sort = searchParams.get('sort') ?? '';
   const collectionName = collectionNames[collection];
   const departmentCategories = collection
     ? categories.filter((item) => item.collection === collection)
@@ -76,12 +85,14 @@ function Shop() {
   const selectIntention = (nextIntention: string) => setFilterParam('intention', nextIntention);
   const selectCategory = (nextCategory: string) => setFilterParam('category', nextCategory);
   const selectPrice = (nextPrice: string) => setFilterParam('price', nextPrice);
+  const selectSort = (nextSort: string) => setFilterParam('sort', nextSort);
 
   const clearDepartmentFilters = () => {
     const nextParams = new URLSearchParams(searchParams);
     nextParams.delete('intention');
     nextParams.delete('category');
     nextParams.delete('price');
+    nextParams.delete('sort');
     setSearchParams(nextParams);
   };
 
@@ -117,15 +128,34 @@ function Shop() {
       ))
       : intentionProducts;
 
-    if (!normalized) {
-      return priceProducts;
+    const searchedProducts = normalized
+      ? priceProducts.filter((product) => {
+        const haystack = [product.title, product.creator, product.tag].join(' ').toLowerCase();
+        return haystack.includes(normalized);
+      })
+      : priceProducts;
+
+    const sortedProducts = [...searchedProducts];
+
+    switch (sort) {
+      case 'price-asc':
+        sortedProducts.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        sortedProducts.sort((a, b) => b.price - a.price);
+        break;
+      case 'rating-desc':
+        sortedProducts.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'newest':
+        sortedProducts.sort((a, b) => b.id - a.id);
+        break;
+      default:
+        break;
     }
 
-    return priceProducts.filter((product) => {
-      const haystack = [product.title, product.creator, product.tag].join(' ').toLowerCase();
-      return haystack.includes(normalized);
-    });
-  }, [activePriceBucket, category, collection, intention, searchTerm]);
+    return sortedProducts;
+  }, [activePriceBucket, category, collection, intention, searchTerm, sort]);
 
   const filteredSellers = useMemo(() => {
     if (collection) {
@@ -315,15 +345,28 @@ function Shop() {
           </aside>
 
           <div className="shop-main">
-            {(searchTerm || intention || category || priceBucket) && (
-              <p className="shop-results-summary">
-                {filteredProducts.length} result{filteredProducts.length === 1 ? '' : 's'}
-                {searchTerm && ` for “${searchTerm}”`}
-                {intention && ` with the intention “${intention}”`}
-                {category && ` in “${departmentCategories.find((item) => item.id === category)?.name ?? category}”`}
-                {activePriceBucket && ` priced ${activePriceBucket.label.toLowerCase()}`}
-              </p>
-            )}
+            <div className="shop-toolbar">
+              {(searchTerm || intention || category || priceBucket) ? (
+                <p className="shop-results-summary">
+                  {filteredProducts.length} result{filteredProducts.length === 1 ? '' : 's'}
+                  {searchTerm && ` for “${searchTerm}”`}
+                  {intention && ` with the intention “${intention}”`}
+                  {category && ` in “${departmentCategories.find((item) => item.id === category)?.name ?? category}”`}
+                  {activePriceBucket && ` priced ${activePriceBucket.label.toLowerCase()}`}
+                </p>
+              ) : <span />}
+
+              <label className="shop-sort">
+                <span>Sort by</span>
+                <select value={sort} onChange={(event) => selectSort(event.target.value)}>
+                  {SORT_OPTIONS.map((option) => (
+                    <option key={option.id || 'default'} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
 
             {filteredProducts.length > 0 ? (
               <section className="shop-grid" aria-label="Shop products">
@@ -372,12 +415,29 @@ function Shop() {
             </div>
           </section>
 
-          {(searchTerm || intention) && (
-            <p className="shop-results-summary">
-              {filteredProducts.length + filteredSellers.length} result{filteredProducts.length + filteredSellers.length === 1 ? '' : 's'}
-              {searchTerm && ` for “${searchTerm}”`}
-              {intention && ` with the intention “${intention}”`}
-            </p>
+          {(searchTerm || intention || filteredProducts.length > 0) && (
+            <div className="shop-toolbar">
+              {(searchTerm || intention) ? (
+                <p className="shop-results-summary">
+                  {filteredProducts.length + filteredSellers.length} result{filteredProducts.length + filteredSellers.length === 1 ? '' : 's'}
+                  {searchTerm && ` for “${searchTerm}”`}
+                  {intention && ` with the intention “${intention}”`}
+                </p>
+              ) : <span />}
+
+              {filteredProducts.length > 0 && (
+                <label className="shop-sort">
+                  <span>Sort by</span>
+                  <select value={sort} onChange={(event) => selectSort(event.target.value)}>
+                    {SORT_OPTIONS.map((option) => (
+                      <option key={option.id || 'default'} value={option.id}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+            </div>
           )}
 
           {filteredProducts.length > 0 ? (
