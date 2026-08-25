@@ -7,7 +7,7 @@ export const sellers: Seller[] = [
     specialty: 'Ceramics & tableware',
     bio: 'Hand-thrown stoneware and quiet everyday rituals for slow living.',
     image: 'https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=1200&q=80',
-    categories: ['apothecary-cleansing', 'divination-tools'],
+    categories: ['home-altar', 'crystals-natural-goods'],
   },
   {
     id: 'hearth-thread',
@@ -15,7 +15,7 @@ export const sellers: Seller[] = [
     specialty: 'Textiles & home',
     bio: 'Natural fibers, layered textures, and cozy pieces for soulful spaces.',
     image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80',
-    categories: ['altar-home-decor'],
+    categories: ['home-altar', 'art-fiber'],
   },
   {
     id: 'petal-foundry',
@@ -23,7 +23,7 @@ export const sellers: Seller[] = [
     specialty: 'Art prints & botanicals',
     bio: 'Pressed floral work, thoughtful stationery, and tactile keepsakes.',
     image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1200&q=80',
-    categories: ['altar-home-decor', 'divination-tools'],
+    categories: ['art-fiber', 'stationery-paper'],
   },
   {
     id: 'moonwell-studio',
@@ -31,7 +31,7 @@ export const sellers: Seller[] = [
     specialty: 'Divination & journaling',
     bio: 'Oracle tools, reflective cards, and guided rituals for intuitive living.',
     image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1200&q=80',
-    categories: ['jewelry-wearables', 'ritual-candles'],
+    categories: ['tarot-divination', 'stationery-paper'],
   },
   {
     id: 'quiet-bloom',
@@ -39,7 +39,7 @@ export const sellers: Seller[] = [
     specialty: 'Self-care rituals',
     bio: 'Bath blends, grounding routines, and gentle care essentials.',
     image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=1200&q=80',
-    categories: ['ritual-candles'],
+    categories: ['bath-body-wellness', 'ritual-witchcraft'],
   },
   {
     id: 'rooted-co',
@@ -47,7 +47,7 @@ export const sellers: Seller[] = [
     specialty: 'Kitchen & home rituals',
     bio: 'Practical objects with a grounded, natural point of view.',
     image: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=80',
-    categories: ['altar-home-decor', 'ritual-candles'],
+    categories: ['home-altar', 'ritual-witchcraft'],
   },
   {
     id: 'ink-and-orbit',
@@ -55,7 +55,7 @@ export const sellers: Seller[] = [
     specialty: 'Stationery & paper goods',
     bio: 'Illustrated notebooks and correspondence pieces for curious minds.',
     image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80',
-    categories: ['jewelry-wearables', 'divination-tools'],
+    categories: ['stationery-paper', 'tarot-divination'],
   },
   {
     id: 'solstice-scent',
@@ -63,7 +63,7 @@ export const sellers: Seller[] = [
     specialty: 'Candles & fragrance',
     bio: 'Small-batch scents inspired by changing light, weather, and place.',
     image: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80',
-    categories: ['ritual-candles', 'jewelry-wearables'],
+    categories: ['ritual-witchcraft', 'bath-body-wellness'],
   },
   {
     id: 'wild-fig-press',
@@ -71,7 +71,7 @@ export const sellers: Seller[] = [
     specialty: 'Printmaking & illustration',
     bio: 'Limited-run linocuts and paper art with a little woodland wonder.',
     image: 'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1200&q=80',
-    categories: ['altar-home-decor', 'jewelry-wearables'],
+    categories: ['art-fiber', 'stationery-paper'],
   },
   {
     id: 'kindred-keepsakes',
@@ -79,6 +79,6 @@ export const sellers: Seller[] = [
     specialty: 'Gifts & personalized goods',
     bio: 'Meaningful mementos made for milestones, memories, and everyday joy.',
     image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1200&q=80',
-    categories: ['divination-tools'],
+    categories: ['gifts-seasonal', 'jewelry-adornment'],
   },
 ];

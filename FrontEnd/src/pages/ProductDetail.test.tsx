@@ -16,7 +16,7 @@ vi.mock('../data/products', () => ({
       creator: 'Luna & Co.',
       tag: 'Ceramics',
       collection: 'purely-handmade',
-      category: 'apothecary-cleansing',
+      category: 'home-altar',
       rating: 4.9,
       image: 'https://example.com/mug.jpg',
       images: [
@@ -33,7 +33,7 @@ vi.mock('../data/products', () => ({
       creator: 'Willow Grove',
       tag: 'Home Ritual',
       collection: 'purely-handmade',
-      category: 'altar-home-decor',
+      category: 'ritual-witchcraft',
       rating: 4.8,
       image: 'https://example.com/candle.jpg',
     },
@@ -189,7 +189,7 @@ describe('ProductDetail', () => {
     renderProductDetailWithId(1);
 
     await waitFor(() => {
-      expect(screen.getByText('apothecary-cleansing')).toBeInTheDocument();
+      expect(screen.getByText('home-altar')).toBeInTheDocument();
     });
 
     expect(screen.getByText('purely-handmade')).toBeInTheDocument();

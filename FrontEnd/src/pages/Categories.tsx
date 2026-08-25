@@ -48,7 +48,7 @@ function Categories() {
         value={searchTerm}
         onChange={setSearchTerm}
         onSubmit={setSearchTerm}
-        placeholder="Search categories like apothecary, pendulums, or divination"
+        placeholder="Search categories like crystals, planners, or divination"
         className="categories-search"
       />
 
@@ -71,7 +71,7 @@ function Categories() {
       ) : (
         <div className="categories-empty-state" aria-live="polite">
           <h2>No categories match your search.</h2>
-          <p>Try another keyword like "apothecary," "altar," or "divination."</p>
+          <p>Try another keyword like "crystals," "planners," or "divination."</p>
           <button type="button" className="categories-clear-search" onClick={() => setSearchTerm('')}>
             Clear search
           </button>

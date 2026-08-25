@@ -7,6 +7,7 @@ import SellerCard from '../components/SellerCard';
 import logo from '../assets/images/eclectary logo nb.png';
 import { useCart } from '../context/CartContext';
 import { products } from '../data/products';
+import { intentions } from '../data/intentions';
 import { getSellers } from '../services/sellerApi';
 
 import '../styles/shop.css';
@@ -17,6 +18,10 @@ const collectionNames: Record<string, string> = {
   'custom-printing': 'Custom Printing',
   'purely-handmade': 'Purely Handmade',
   'digital-creations': 'Digital Creations',
+};
+
+const collectionDescriptions: Record<string, string> = {
+  'purely-handmade': 'Physical products made by independent creators.',
 };
 
 const AUTH_STORAGE_KEY = 'eclectary-auth';
@@ -35,12 +40,25 @@ function hasAuthSession() {
 
 function Shop() {
   const { totalItems } = useCart();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const initialSearchTerm = searchParams.get('search') ?? '';
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthSession());
   const collection = searchParams.get('collection') ?? '';
+  const intention = searchParams.get('intention') ?? '';
   const collectionName = collectionNames[collection];
+
+  const selectIntention = (nextIntention: string) => {
+    const nextParams = new URLSearchParams(searchParams);
+
+    if (nextIntention) {
+      nextParams.set('intention', nextIntention);
+    } else {
+      nextParams.delete('intention');
+    }
+
+    setSearchParams(nextParams);
+  };
 
   useEffect(() => {
     const syncAuthState = () => setIsLoggedIn(hasAuthSession());
@@ -59,16 +77,19 @@ function Shop() {
     const collectionProducts = collection
       ? products.filter((product) => product.collection === collection)
       : products;
+    const intentionProducts = intention
+      ? collectionProducts.filter((product) => product.intentions?.includes(intention))
+      : collectionProducts;
 
     if (!normalized) {
-      return collectionProducts;
+      return intentionProducts;
     }
 
-    return collectionProducts.filter((product) => {
+    return intentionProducts.filter((product) => {
       const haystack = [product.title, product.creator, product.tag].join(' ').toLowerCase();
       return haystack.includes(normalized);
     });
-  }, [collection, searchTerm]);
+  }, [collection, intention, searchTerm]);
 
   const filteredSellers = useMemo(() => {
     if (collection) {
@@ -148,6 +169,7 @@ function Shop() {
         <div>
           {!collectionName && <p className="eyebrow">Shop the collection</p>}
           <h1>{collectionName ?? 'Find pieces made with intention.'}</h1>
+          {collectionDescriptions[collection] && <p>{collectionDescriptions[collection]}</p>}
         </div>
       </header>
 
@@ -160,9 +182,39 @@ function Shop() {
         />
       )}
 
-      {searchTerm && (
+      <section className="shop-intentions" aria-labelledby="shop-intentions-heading">
+        <div className="section-heading">
+          <p className="eyebrow">Shop by intention</p>
+          <h2 id="shop-intentions-heading">Find what calls to you.</h2>
+        </div>
+        <div className="shop-intentions__list" role="group" aria-label="Filter products by intention">
+          <button
+            type="button"
+            className={`shop-intention${!intention ? ' shop-intention--active' : ''}`}
+            aria-pressed={!intention}
+            onClick={() => selectIntention('')}
+          >
+            All intentions
+          </button>
+          {intentions.map((availableIntention) => (
+            <button
+              key={availableIntention}
+              type="button"
+              className={`shop-intention${intention === availableIntention ? ' shop-intention--active' : ''}`}
+              aria-pressed={intention === availableIntention}
+              onClick={() => selectIntention(availableIntention)}
+            >
+              {availableIntention}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {(searchTerm || intention) && (
         <p className="shop-results-summary">
-          {filteredProducts.length + filteredSellers.length} result{filteredProducts.length + filteredSellers.length === 1 ? '' : 's'} for “{searchTerm}”
+          {filteredProducts.length + filteredSellers.length} result{filteredProducts.length + filteredSellers.length === 1 ? '' : 's'}
+          {searchTerm && ` for “${searchTerm}”`}
+          {intention && ` with the intention “${intention}”`}
         </p>
       )}
 
