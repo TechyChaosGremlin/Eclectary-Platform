@@ -156,7 +156,7 @@ function Home() {
           <Link to="/categories" className="home-section-link">Browse categories <span aria-hidden="true">→</span></Link>
         </div>
         <div className="home-category-grid">
-          {categories.map((category) => <CategoryCard key={category.id} category={category} />)}
+          {categories.slice(0, 10).map((category) => <CategoryCard key={category.id} category={category} />)}
         </div>
       </section>
 

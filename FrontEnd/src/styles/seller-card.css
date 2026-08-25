@@ -93,3 +93,42 @@
   outline: 2px solid rgba(88, 23, 76, 0.55);
   outline-offset: 2px;
 }
+
+@media (max-width: 600px) {
+  .seller-card__content {
+    gap: 4px;
+    padding: var(--space-2);
+  }
+
+  .seller-card__name {
+    font-size: 0.95rem;
+  }
+
+  .seller-card__specialty {
+    font-size: 0.72rem;
+  }
+
+  .seller-card__bio {
+    font-size: 0.82rem;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .seller-card__link {
+    margin-top: var(--space-1);
+    padding: 6px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .seller-card__content {
+    padding: var(--space-1);
+  }
+
+  .seller-card__bio {
+    -webkit-line-clamp: 2;
+  }
+}

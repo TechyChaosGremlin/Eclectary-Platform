@@ -136,5 +136,10 @@
   .account-actions .action {
     padding: 6px;
   }
+
+  .account-actions .action span:first-child {
+    font-size: 28px;
+    transform: none;
+  }
 }
 
