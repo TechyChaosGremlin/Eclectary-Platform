@@ -222,8 +222,8 @@ function Shop() {
         <div className="shop-layout">
           <aside className="shop-sidebar" aria-label={`${collectionName} filters`}>
             {departmentCategories.length > 0 && (
-              <div className="shop-sidebar__section">
-                <h3 className="shop-sidebar__heading">Categories</h3>
+              <details className="shop-sidebar__section" open>
+                <summary className="shop-sidebar__heading">Categories</summary>
                 <ul className="shop-sidebar__list">
                   <li>
                     <button
@@ -248,11 +248,11 @@ function Shop() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </details>
             )}
 
-            <div className="shop-sidebar__section">
-              <h3 className="shop-sidebar__heading">Shop by intention</h3>
+            <details className="shop-sidebar__section" open>
+              <summary className="shop-sidebar__heading">Shop by intention</summary>
               <ul className="shop-sidebar__list">
                 <li>
                   <button
@@ -277,10 +277,10 @@ function Shop() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </details>
 
-            <div className="shop-sidebar__section">
-              <h3 className="shop-sidebar__heading">Price</h3>
+            <details className="shop-sidebar__section" open>
+              <summary className="shop-sidebar__heading">Price</summary>
               <ul className="shop-sidebar__list">
                 <li>
                   <button
@@ -305,7 +305,7 @@ function Shop() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </details>
 
             {(intention || category || priceBucket) && (
               <button type="button" className="shop-sidebar__clear" onClick={clearDepartmentFilters}>

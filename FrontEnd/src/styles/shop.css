@@ -177,6 +177,33 @@
   text-transform: uppercase;
 }
 
+summary.shop-sidebar__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+summary.shop-sidebar__heading::-webkit-details-marker {
+  display: none;
+}
+
+summary.shop-sidebar__heading::after {
+  content: '⌄';
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.shop-sidebar__section[open] > summary.shop-sidebar__heading::after {
+  transform: rotate(180deg);
+}
+
+.shop-sidebar__section:not([open]) > .shop-sidebar__heading {
+  margin-bottom: 0;
+}
+
 .shop-sidebar__list {
   display: flex;
   flex-direction: column;
