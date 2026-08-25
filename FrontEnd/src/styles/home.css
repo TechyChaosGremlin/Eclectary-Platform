@@ -678,8 +678,8 @@
   }
 
   .legacy-search-icon { margin-right: 8px; font-size: 17px; }
-  .makers-section { width: var(--legacy-rail-width); padding: 28px 14px 34px; }
-  .makers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .makers-section { width: var(--legacy-rail-width); padding: 28px 8px 34px; }
+  .makers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 6px; }
 
   .home-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
