@@ -265,7 +265,7 @@ function Shop() {
         </section>
       )}
 
-      <header className="shop-hero">
+      <header className={`shop-hero${collectionName ? ' shop-hero--collection' : ''}`}>
         <div>
           {!collectionName && <p className="eyebrow">Shop the collection</p>}
           <h1>{collectionName ?? 'Find pieces made with intention.'}</h1>
