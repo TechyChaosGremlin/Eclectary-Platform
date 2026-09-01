@@ -295,9 +295,10 @@
   }
 }
 
-/* Legacy Eclectary landing page */
+/* Legacy Eclectary landing page - this is the active homepage rail */
 .legacy-home {
-  --legacy-rail-width: min(calc(100% - 40px), 1280px);
+  /* Single content rail shared by all major homepage sections */
+  --legacy-rail-width: min(calc(100% - var(--content-padding-desktop)), 1400px);
   padding-bottom: 56px;
   background: #F3EFE5;
 }
@@ -349,7 +350,7 @@
   grid-template-columns: minmax(150px, 190px) minmax(320px, 1fr) auto;
   align-items: center;
   gap: 10px;
-  width: min(calc(100% - 40px), 1280px);
+  width: var(--legacy-rail-width);
   padding: 8px 12px;
   background: transparent;
 }
@@ -405,7 +406,7 @@
 }
 
 .home-search-results {
-  width: min(var(--container-width), calc(100% - var(--content-padding-desktop)));
+  width: var(--legacy-rail-width);
   margin: 0 auto 36px;
 }
 
@@ -431,7 +432,7 @@
 .legacy-search-bar {
   display: flex;
   align-items: center;
-  width: min(100%, 1100px);
+  width: min(100%, 820px);
   padding: 10px 20px;
   border: 2px solid #CCD7B3;
   border-radius: 40px;
@@ -578,6 +579,10 @@
 .makers-footer a:focus-visible { color: #A14D76; }
 
 @media (max-width: 900px) {
+  .legacy-home {
+    --legacy-rail-width: min(calc(100% - var(--content-padding-tablet)), var(--container-width-tablet));
+  }
+
   .home-bottom-nav {
     grid-template-columns: minmax(128px, 150px) minmax(220px, 1fr) auto;
     gap: 12px;
@@ -596,10 +601,6 @@
 }
 
 @media (max-width: 600px) {
-  .home-search-results {
-    width: min(100% - var(--content-padding-mobile), var(--container-width-mobile));
-  }
-
   .home-search-results .makers-header {
     align-items: flex-start;
     flex-direction: column;
@@ -611,7 +612,7 @@
   }
 
   .legacy-home {
-    --legacy-rail-width: calc(100% - 24px);
+    --legacy-rail-width: min(calc(100% - var(--content-padding-mobile)), var(--container-width-mobile));
   }
 
   .legacy-hero-banner {
