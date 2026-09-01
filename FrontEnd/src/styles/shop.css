@@ -192,7 +192,6 @@
 .shop-sidebar {
   position: sticky;
   top: 24px;
-  margin-top: 39px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -325,6 +324,35 @@ summary.shop-sidebar__heading::after {
 
 .shop-main {
   min-width: 0;
+}
+
+/* Desktop: toolbar owns its own row so the sidebar starts level with the first product card. */
+@media (min-width: 901px) {
+  .shop-layout {
+    grid-template-rows: auto auto;
+    column-gap: 32px;
+    row-gap: 0;
+  }
+
+  .shop-layout .shop-main {
+    display: contents;
+  }
+
+  .shop-layout .shop-toolbar {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .shop-layout .shop-sidebar {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .shop-layout .shop-grid,
+  .shop-layout .shop-empty-state {
+    grid-column: 2;
+    grid-row: 2;
+  }
 }
 
 @media (max-width: 900px) {
