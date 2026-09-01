@@ -43,6 +43,27 @@ const collectionDescriptions: Record<string, string> = {
 const AUTH_STORAGE_KEY = 'eclectary-auth';
 const AUTH_EVENT_NAME = 'eclectary-auth-change';
 
+// Matches the single-column breakpoint in shop.css.
+const DESKTOP_MEDIA_QUERY = '(min-width: 901px)';
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(() => (
+    typeof window === 'undefined' ? true : window.matchMedia(DESKTOP_MEDIA_QUERY).matches
+  ));
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(DESKTOP_MEDIA_QUERY);
+    const syncIsDesktop = (event: MediaQueryListEvent) => setIsDesktop(event.matches);
+
+    setIsDesktop(mediaQuery.matches);
+    mediaQuery.addEventListener('change', syncIsDesktop);
+
+    return () => mediaQuery.removeEventListener('change', syncIsDesktop);
+  }, []);
+
+  return isDesktop;
+}
+
 function hasAuthSession() {
   if (typeof window === 'undefined') {
     return false;
@@ -60,6 +81,13 @@ function Shop() {
   const initialSearchTerm = searchParams.get('search') ?? '';
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthSession());
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const isDesktop = useIsDesktop();
+  const [openFilterSections, setOpenFilterSections] = useState(() => ({
+    categories: isDesktop,
+    intentions: isDesktop,
+    price: isDesktop,
+  }));
   const collection = searchParams.get('collection') ?? '';
   const intention = searchParams.get('intention') ?? '';
   const category = searchParams.get('category') ?? '';
@@ -107,6 +135,12 @@ function Shop() {
       window.removeEventListener(AUTH_EVENT_NAME, syncAuthState);
     };
   }, []);
+
+  useEffect(() => {
+    if (isDesktop) {
+      setOpenFilterSections({ categories: true, intentions: true, price: true });
+    }
+  }, [isDesktop]);
 
   const activePriceBucket = PRICE_BUCKETS.find((bucket) => bucket.id === priceBucket);
 
@@ -250,10 +284,33 @@ function Shop() {
 
       {collectionName ? (
         <div className="shop-layout">
-          <aside className="shop-sidebar" aria-label={`${collectionName} filters`}>
+          <button
+            type="button"
+            className="shop-filters-toggle"
+            aria-expanded={isFiltersOpen}
+            aria-controls="shop-filters"
+            onClick={() => setIsFiltersOpen((isOpen) => !isOpen)}
+          >
+            <span aria-hidden="true">✦</span>
+            Filters
+          </button>
+
+          <aside
+            id="shop-filters"
+            className={`shop-sidebar${isFiltersOpen ? ' shop-sidebar--open' : ''}`}
+            aria-label={`${collectionName} filters`}
+          >
+            <p className="shop-sidebar__title"><span aria-hidden="true">✦</span> Filters</p>
             {departmentCategories.length > 0 && (
-              <details className="shop-sidebar__section" open>
-                <summary className="shop-sidebar__heading">Categories</summary>
+              <details
+                className="shop-sidebar__section"
+                open={isDesktop ? openFilterSections.categories : undefined}
+                onToggle={(event) => {
+                  const isOpen = event.currentTarget.open;
+                  setOpenFilterSections((sections) => ({ ...sections, categories: isOpen }));
+                }}
+              >
+                <summary className="shop-sidebar__heading"><span aria-hidden="true">✧</span> Categories</summary>
                 <ul className="shop-sidebar__list">
                   <li>
                     <button
@@ -281,8 +338,15 @@ function Shop() {
               </details>
             )}
 
-            <details className="shop-sidebar__section" open>
-              <summary className="shop-sidebar__heading">Shop by intention</summary>
+            <details
+              className="shop-sidebar__section"
+              open={isDesktop ? openFilterSections.intentions : undefined}
+                onToggle={(event) => {
+                  const isOpen = event.currentTarget.open;
+                  setOpenFilterSections((sections) => ({ ...sections, intentions: isOpen }));
+                }}
+            >
+              <summary className="shop-sidebar__heading"><span aria-hidden="true">✦</span> Shop by intention</summary>
               <ul className="shop-sidebar__list">
                 <li>
                   <button
@@ -309,8 +373,15 @@ function Shop() {
               </ul>
             </details>
 
-            <details className="shop-sidebar__section" open>
-              <summary className="shop-sidebar__heading">Price</summary>
+            <details
+              className="shop-sidebar__section"
+              open={isDesktop ? openFilterSections.price : undefined}
+                onToggle={(event) => {
+                  const isOpen = event.currentTarget.open;
+                  setOpenFilterSections((sections) => ({ ...sections, price: isOpen }));
+                }}
+            >
+              <summary className="shop-sidebar__heading"><span aria-hidden="true">◇</span> Price</summary>
               <ul className="shop-sidebar__list">
                 <li>
                   <button

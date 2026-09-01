@@ -132,7 +132,7 @@
   align-items: end;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
   padding: 18px 0 8px;
 }
 
@@ -147,36 +147,54 @@
 
 .shop-layout {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: 232px minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
 
+.shop-filters-toggle {
+  display: none;
+}
+
 .shop-sidebar {
   position: sticky;
-  top: 20px;
-  /* Offsets the sidebar past the toolbar so it starts level with the first product card. */
-  margin-top: var(--shop-toolbar-block, 36px);
+  top: 24px;
+  margin-top: 39px;
   display: flex;
   flex-direction: column;
-  gap: 26px;
-  padding: 20px 18px;
-  border: 1px solid var(--border-aura);
+  gap: 16px;
+  min-width: 0;
+  padding: 18px 16px 16px;
+  border: 1px solid #CCD7B3;
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.74);
+  background: #F8F3EA;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.shop-sidebar__title {
+  margin: 0;
+  color: var(--color-primary);
+  font: var(--text-button);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.shop-sidebar__title span,
+.shop-sidebar__heading span {
+  color: var(--color-primary-2);
 }
 
 .shop-sidebar__section + .shop-sidebar__section {
-  padding-top: 22px;
-  border-top: 1px solid var(--border-aura);
+  padding-top: 16px;
+  border-top: 1px solid rgba(155, 178, 128, 0.55);
 }
 
 .shop-sidebar__heading {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   color: var(--color-primary);
-  font-size: 1rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font: var(--text-nav);
+  font-weight: 700;
 }
 
 summary.shop-sidebar__heading {
@@ -209,7 +227,7 @@ summary.shop-sidebar__heading::after {
 .shop-sidebar__list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -224,14 +242,15 @@ summary.shop-sidebar__heading::after {
   color: var(--color-muted);
   cursor: pointer;
   font: var(--text-nav);
-  padding: 7px 8px;
-  transition: background 0.2s ease, color 0.2s ease;
+  padding: 6px 8px;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
 .shop-sidebar__link:hover,
 .shop-sidebar__link:focus-visible {
-  background: rgba(88, 23, 76, 0.08);
+  background: var(--sage-100);
   color: var(--color-primary);
+  transform: translateX(2px);
 }
 
 .shop-sidebar__link--active {
@@ -240,20 +259,29 @@ summary.shop-sidebar__heading::after {
   font-weight: 700;
 }
 
+.shop-sidebar__link--active::before {
+  content: '✦';
+  display: inline-block;
+  margin-right: 6px;
+  color: var(--beige-200);
+  font-size: 0.8em;
+}
+
 .shop-sidebar__link:focus-visible {
   outline: 2px solid var(--color-primary-2);
   outline-offset: 2px;
 }
 
 .shop-sidebar__clear {
-  border: 1px solid var(--border-aura);
+  border: 1px solid var(--color-primary);
   border-radius: 999px;
   background: transparent;
   color: var(--color-primary);
   cursor: pointer;
   font: var(--text-nav);
-  padding: 8px 12px;
-  transition: background 0.2s ease, color 0.2s ease;
+  align-self: flex-start;
+  padding: 6px 10px;
+  transition: background 0.18s ease, color 0.18s ease;
 }
 
 .shop-sidebar__clear:hover,
@@ -269,11 +297,44 @@ summary.shop-sidebar__heading::after {
 @media (max-width: 900px) {
   .shop-layout {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .shop-filters-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: start;
+    gap: 6px;
+    border: 1px solid var(--sage-300);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--color-primary);
+    cursor: pointer;
+    font: var(--text-nav);
+    font-weight: 700;
+    padding: 7px 12px;
+  }
+
+  .shop-filters-toggle:hover,
+  .shop-filters-toggle:focus-visible {
+    background: var(--sage-100);
+  }
+
+  .shop-filters-toggle:focus-visible {
+    outline: 2px solid var(--color-primary-2);
+    outline-offset: 2px;
   }
 
   .shop-sidebar {
+    display: none;
     position: static;
     margin-top: 0;
+    padding: 16px;
+  }
+
+  .shop-sidebar--open {
+    display: flex;
   }
 }
 
@@ -348,7 +409,7 @@ summary.shop-sidebar__heading::after {
   align-items: center;
   gap: 8px;
   margin-left: auto;
-  transform: translateY(-8px);
+  transform: translateY(-4px);
   color: var(--color-primary);
   font: var(--text-nav);
   white-space: nowrap;
