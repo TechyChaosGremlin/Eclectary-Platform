@@ -85,7 +85,7 @@ describe('ProductDetail', () => {
 
     expect(screen.getByText('Ceramics')).toBeInTheDocument();
     expect(screen.getByText('★ 4.9')).toBeInTheDocument();
-    expect(screen.getByText('Beautiful handmade mug')).toBeInTheDocument();
+    expect(screen.getAllByText('Beautiful handmade mug')).toHaveLength(2);
   });
 
   it('should render product price formatted correctly', async () => {
@@ -241,13 +241,13 @@ describe('ProductDetail', () => {
     });
   });
 
-  it('should render product details list', async () => {
+  it('should render product details from available product data', async () => {
     renderProductDetailWithId(1);
 
     await waitFor(() => {
       expect(screen.getByText('Collection')).toBeInTheDocument();
-      expect(screen.getByText('Material')).toBeInTheDocument();
-      expect(screen.getByText('Delivery')).toBeInTheDocument();
+      expect(screen.getByText('Category')).toBeInTheDocument();
+      expect(screen.getByText('About this item')).toBeInTheDocument();
     });
   });
 
@@ -255,7 +255,7 @@ describe('ProductDetail', () => {
     renderProductDetailWithId(1);
 
     await waitFor(() => {
-      expect(screen.getByText('Beautiful handmade mug')).toBeInTheDocument();
+      expect(screen.getAllByText('Beautiful handmade mug')).toHaveLength(2);
     });
   });
 

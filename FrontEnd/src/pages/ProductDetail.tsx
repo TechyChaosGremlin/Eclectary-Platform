@@ -25,6 +25,7 @@ function ProductDetailContent({ productId }: { productId?: string }) {
   const seller = product ? getSellers().find((item) => item.name === product.creator) : undefined;
 
   const [selectedImage, setSelectedImage] = useState(product?.image ?? '');
+  const [quantity, setQuantity] = useState(1);
 
   const relatedProducts = useMemo(
     () => (product ? products.filter((item) => item.id !== product.id).slice(0, 3) : []),
@@ -47,8 +48,9 @@ function ProductDetailContent({ productId }: { productId?: string }) {
     ? product.images
     : [product.image, product.image, product.image];
 
-  const handleAddToCart = () => addToCart(product, 1);
+  const handleAddToCart = () => addToCart(product, quantity);
   const handleToggleWishlist = () => toggleWishlist(product.id);
+  const productType = product.collection ?? 'handcrafted item';
 
   return (
     <article className="product-detail">
@@ -85,14 +87,8 @@ function ProductDetailContent({ productId }: { productId?: string }) {
           <p className="product-detail__eyebrow">{product.tag}</p>
           <h1>{product.title}</h1>
 
-          <div className="product-detail__meta">
-            <span className="product-detail__rating">★ {product.rating.toFixed(1)}</span>
-            <span>{product.category ?? 'Handcrafted'}</span>
-          </div>
-
-          <div className="product-detail__seller">
-            <span>By {seller ? <Link to={`/seller/${seller.id}`}><strong>{product.creator}</strong></Link> : <strong>{product.creator}</strong>}</span>
-            <span>Ships in 3–5 days</span>
+          <div className="product-detail__rating" aria-label={`Rated ${product.rating.toFixed(1)} out of 5`}>
+            ★ {product.rating.toFixed(1)}
           </div>
 
           <div className="product-detail__price">${product.price.toFixed(2)}</div>
@@ -101,21 +97,63 @@ function ProductDetailContent({ productId }: { productId?: string }) {
             {product.description ?? 'Thoughtfully designed and made to bring a sense of calm, beauty, and individuality into everyday rituals.'}
           </p>
 
+          <div className="product-detail__seller">
+            <span>Made by {seller ? <Link to={`/seller/${seller.id}`}><strong>{product.creator}</strong></Link> : <strong>{product.creator}</strong>}</span>
+            {seller && <Link className="product-detail__shop-link" to={`/seller/${seller.id}`}>Visit shop</Link>}
+          </div>
+
           <div className="product-detail__actions">
+            <div className="product-detail__quantity">
+              <span id="quantity-label">Quantity</span>
+              <div className="product-detail__quantity-control" role="group" aria-labelledby="quantity-label">
+                <button type="button" onClick={() => setQuantity((current) => Math.max(1, current - 1))} aria-label="Decrease quantity">−</button>
+                <output aria-live="polite">{quantity}</output>
+                <button type="button" onClick={() => setQuantity((current) => current + 1)} aria-label="Increase quantity">+</button>
+              </div>
+            </div>
             <button type="button" className="product-detail__button" onClick={handleAddToCart}>
               {isInCart(product.id) ? 'Add another' : 'Add to cart'}
             </button>
             <button type="button" className="product-detail__secondary" onClick={handleToggleWishlist}>
-              {isWishlisted(product.id) ? 'Saved to wishlist' : 'Save for later'}
+              {isWishlisted(product.id) ? '♥ Saved to wishlist' : '♡ Save for later'}
             </button>
           </div>
-
-          <ul className="product-detail__details">
-            <li><span>Collection</span><strong>{product.collection ?? 'Curated finds'}</strong></li>
-            <li><span>Material</span><strong>Artist-made</strong></li>
-            <li><span>Delivery</span><strong>Free shipping over $50</strong></li>
-          </ul>
         </div>
+      </div>
+
+      <div className="product-detail__information">
+        <section className="product-detail__info-section">
+          <h2>About this item</h2>
+          <p>{product.description ?? 'Thoughtfully designed and made to bring a sense of calm, beauty, and individuality into everyday rituals.'}</p>
+        </section>
+
+        <section className="product-detail__info-section">
+          <h2>Product details</h2>
+          <dl className="product-detail__details">
+            <div><dt>Collection</dt><dd>{productType}</dd></div>
+            {product.category && <div><dt>Category</dt><dd>{product.category}</dd></div>}
+            {product.intentions && product.intentions.length > 0 && <div><dt>Intentions</dt><dd>{product.intentions.join(', ')}</dd></div>}
+          </dl>
+        </section>
+
+        <section className="product-detail__info-section">
+          <h2>Shipping &amp; returns</h2>
+          <p>Ships in 3–5 days</p>
+          <p>Free shipping over $50.</p>
+        </section>
+
+        {seller && (
+          <section className="product-detail__info-section product-detail__maker">
+            <img className="product-detail__maker-image" src={seller.image} alt="" />
+            <div>
+              <p className="product-detail__eyebrow">Meet the maker</p>
+              <h2>{seller.name}</h2>
+              {seller.specialty && <p>{seller.specialty}</p>}
+              {seller.bio && <p>{seller.bio}</p>}
+              <Link className="product-detail__shop-link" to={`/seller/${seller.id}`}>Visit shop</Link>
+            </div>
+          </section>
+        )}
       </div>
 
       {relatedProducts.length > 0 && (
