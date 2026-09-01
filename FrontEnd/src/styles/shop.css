@@ -155,6 +155,8 @@
 .shop-sidebar {
   position: sticky;
   top: 20px;
+  /* Offsets the sidebar past the toolbar so it starts level with the first product card. */
+  margin-top: var(--shop-toolbar-block, 36px);
   display: flex;
   flex-direction: column;
   gap: 26px;
@@ -271,6 +273,7 @@ summary.shop-sidebar__heading::after {
 
   .shop-sidebar {
     position: static;
+    margin-top: 0;
   }
 }
 
@@ -332,7 +335,8 @@ summary.shop-sidebar__heading::after {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 20px;
+  min-height: 32px;
+  margin-bottom: 4px;
 }
 
 .shop-toolbar .shop-results-summary {
@@ -344,6 +348,7 @@ summary.shop-sidebar__heading::after {
   align-items: center;
   gap: 8px;
   margin-left: auto;
+  transform: translateY(-8px);
   color: var(--color-primary);
   font: var(--text-nav);
   white-space: nowrap;
