@@ -51,6 +51,8 @@ function ProductDetailContent({ productId }: { productId?: string }) {
   const handleAddToCart = () => addToCart(product, quantity);
   const handleToggleWishlist = () => toggleWishlist(product.id);
   const productType = product.collection ?? 'handcrafted item';
+  // Temporary display value until review counts are supplied with product data.
+  const reviewCount = 24;
 
   return (
     <article className="product-detail">
@@ -60,14 +62,6 @@ function ProductDetailContent({ productId }: { productId?: string }) {
 
       <div className="product-detail__layout">
         <div className="product-detail__gallery" aria-label="Product gallery">
-          <div className="product-detail__main-image-wrap">
-            <img
-              className="product-detail__main-image"
-              src={selectedImage || product.image}
-              alt={product.title}
-            />
-          </div>
-
           <div className="product-detail__thumbs">
             {gallery.map((image, index) => (
               <button
@@ -81,14 +75,24 @@ function ProductDetailContent({ productId }: { productId?: string }) {
               </button>
             ))}
           </div>
+
+          <div className="product-detail__main-image-wrap">
+            <img
+              className="product-detail__main-image"
+              src={selectedImage || product.image}
+              alt={product.title}
+            />
+          </div>
         </div>
 
         <div className="product-detail__content">
           <p className="product-detail__eyebrow">{product.tag}</p>
           <h1>{product.title}</h1>
 
-          <div className="product-detail__rating" aria-label={`Rated ${product.rating.toFixed(1)} out of 5`}>
-            ★ {product.rating.toFixed(1)}
+          <div className="product-detail__rating" aria-label={`Rated ${product.rating.toFixed(1)} out of 5 from ${reviewCount} reviews`}>
+            <span className="product-detail__stars" aria-hidden="true">★★★★★</span>
+            <span>{product.rating.toFixed(1)}</span>
+            <button type="button" className="product-detail__review-link">· {reviewCount} reviews</button>
           </div>
 
           <div className="product-detail__price">${product.price.toFixed(2)}</div>
@@ -111,12 +115,17 @@ function ProductDetailContent({ productId }: { productId?: string }) {
                 <button type="button" onClick={() => setQuantity((current) => current + 1)} aria-label="Increase quantity">+</button>
               </div>
             </div>
-            <button type="button" className="product-detail__button" onClick={handleAddToCart}>
-              {isInCart(product.id) ? 'Add another' : 'Add to cart'}
-            </button>
             <button type="button" className="product-detail__secondary" onClick={handleToggleWishlist}>
               {isWishlisted(product.id) ? '♥ Saved to wishlist' : '♡ Save for later'}
             </button>
+            <button type="button" className="product-detail__button" onClick={handleAddToCart}>
+              {isInCart(product.id) ? 'Add another' : 'Add to cart'}
+            </button>
+          </div>
+
+          <div className="product-detail__purchase-shipping">
+            <span>Ships in 3–5 days</span>
+            <span>Returns accepted</span>
           </div>
         </div>
       </div>
@@ -128,10 +137,11 @@ function ProductDetailContent({ productId }: { productId?: string }) {
         </section>
 
         <section className="product-detail__info-section">
-          <h2>Product details</h2>
+          <h2>Item details</h2>
           <dl className="product-detail__details">
             <div><dt>Collection</dt><dd>{productType}</dd></div>
             {product.category && <div><dt>Category</dt><dd>{product.category}</dd></div>}
+            <div><dt>Product type</dt><dd>{product.tag}</dd></div>
             {product.intentions && product.intentions.length > 0 && <div><dt>Intentions</dt><dd>{product.intentions.join(', ')}</dd></div>}
           </dl>
         </section>
@@ -139,7 +149,7 @@ function ProductDetailContent({ productId }: { productId?: string }) {
         <section className="product-detail__info-section">
           <h2>Shipping &amp; returns</h2>
           <p>Ships in 3–5 days</p>
-          <p>Free shipping over $50.</p>
+          <p>Returns accepted. Free shipping over $50.</p>
         </section>
 
         {seller && (
@@ -154,12 +164,22 @@ function ProductDetailContent({ productId }: { productId?: string }) {
             </div>
           </section>
         )}
+
+        <section className="product-detail__info-section product-detail__reviews" aria-labelledby="customer-reviews-heading">
+          <h2 id="customer-reviews-heading">Customer reviews</h2>
+          <div className="product-detail__rating">
+            <span className="product-detail__stars" aria-hidden="true">★★★★★</span>
+            <span>{product.rating.toFixed(1)}</span>
+            <span>· {reviewCount} reviews</span>
+          </div>
+          <p>Customer reviews will appear here as they become available.</p>
+        </section>
       </div>
 
       {relatedProducts.length > 0 && (
         <section className="product-detail__related" aria-label="Related products">
           <div className="product-detail__related-header">
-            <h2>You may also like</h2>
+            <h2>You May Also Like</h2>
             <Link className="product-detail__related-link" to="/shop">View all</Link>
           </div>
 

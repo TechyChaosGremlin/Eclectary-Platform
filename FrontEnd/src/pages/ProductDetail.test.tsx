@@ -83,8 +83,9 @@ describe('ProductDetail', () => {
       expect(screen.getByText('Moonlit Clay Mug')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Ceramics')).toBeInTheDocument();
-    expect(screen.getByText('★ 4.9')).toBeInTheDocument();
+    expect(screen.getAllByText('Ceramics').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('★★★★★')).toHaveLength(2);
+    expect(screen.getAllByText('4.9')).toHaveLength(2);
     expect(screen.getAllByText('Beautiful handmade mug')).toHaveLength(2);
   });
 
@@ -208,7 +209,7 @@ describe('ProductDetail', () => {
     renderProductDetailWithId(1);
 
     await waitFor(() => {
-      expect(screen.getByText('You may also like')).toBeInTheDocument();
+      expect(screen.getByText('You May Also Like')).toBeInTheDocument();
     });
 
     expect(screen.getByText('Botanical Candle Set')).toBeInTheDocument();
@@ -237,7 +238,7 @@ describe('ProductDetail', () => {
     renderProductDetailWithId(1);
 
     await waitFor(() => {
-      expect(screen.getByText(/Ships in 3–5 days/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Ships in 3–5 days/i).length).toBeGreaterThan(0);
     });
   });
 
