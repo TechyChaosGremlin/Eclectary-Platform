@@ -12,6 +12,15 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Rails secrets
+BackEnd/config/master.key
+BackEnd/config/credentials/*.key
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
