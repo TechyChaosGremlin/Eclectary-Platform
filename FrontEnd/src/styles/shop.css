@@ -199,7 +199,7 @@
   padding: 18px 16px 24px 14px;
   border-right: 1px solid #DDD9D1;
   border-radius: 0;
-  background: #F5F3EE;
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .shop-sidebar__title {
@@ -398,7 +398,7 @@ summary.shop-sidebar__heading::after {
     margin-top: 0;
     padding: 16px;
     border-radius: 0;
-    background: #F5F3EE;
+    background: rgba(255, 255, 255, 0.85);
     border-right: 1px solid #DDD9D1;
     box-shadow: var(--shadow-lg);
   }
