@@ -77,15 +77,15 @@ const renderProductDetailWithId = (productId: string | number = 1) => {
 
 describe('ProductDetail', () => {
   it('should render product details when product is found', async () => {
-    renderProductDetailWithId(1);
+    const { container } = renderProductDetailWithId(1);
 
     await waitFor(() => {
       expect(screen.getByText('Moonlit Clay Mug')).toBeInTheDocument();
     });
 
     expect(screen.getAllByText('Ceramics').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('★★★★★')).toHaveLength(2);
-    expect(screen.getAllByText('4.9')).toHaveLength(2);
+    expect(container.querySelectorAll('.product-detail__stars')).toHaveLength(2);
+    expect(screen.getAllByText('4.9').length).toBeGreaterThanOrEqual(2);
     expect(screen.getAllByText('Beautiful handmade mug')).toHaveLength(2);
   });
 

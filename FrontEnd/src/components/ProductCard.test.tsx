@@ -32,7 +32,7 @@ describe('ProductCard', () => {
 
     expect(screen.getByText('Test Mug')).toBeInTheDocument();
     expect(screen.getByText('Ceramics')).toBeInTheDocument();
-    expect(screen.getByText('★ 4.5')).toBeInTheDocument();
+    expect(screen.getByLabelText('Rated 4.5 out of 5.')).toBeInTheDocument();
     expect(screen.getByText('by Test Creator')).toBeInTheDocument();
     expect(screen.getByText('$29.99')).toBeInTheDocument();
   });
@@ -113,7 +113,40 @@ describe('ProductCard', () => {
     };
 
     renderProductCard(productWithHighRating);
-    expect(screen.getByText('★ 4.9')).toBeInTheDocument();
+    expect(screen.getByLabelText('Rated 4.9 out of 5.')).toBeInTheDocument();
+  });
+
+  it('should display review count with correct singular/plural wording', () => {
+    const productWithOneReview: Product = {
+      ...mockProduct,
+      rating: 5.0,
+      reviewCount: 1,
+    };
+
+    renderProductCard(productWithOneReview);
+    expect(screen.getByLabelText('Rated 5.0 out of 5 from 1 review.')).toBeInTheDocument();
+    expect(screen.getByText('(1)')).toBeInTheDocument();
+
+    const productWithManyReviews: Product = {
+      ...mockProduct,
+      rating: 4.8,
+      reviewCount: 24,
+    };
+
+    renderProductCard(productWithManyReviews);
+    expect(screen.getByLabelText('Rated 4.8 out of 5 from 24 reviews.')).toBeInTheDocument();
+    expect(screen.getByText('(24)')).toBeInTheDocument();
+  });
+
+  it('should show "No reviews yet" for products with zero reviews', () => {
+    const productWithNoReviews: Product = {
+      ...mockProduct,
+      reviewCount: 0,
+    };
+
+    renderProductCard(productWithNoReviews);
+    expect(screen.getByText('No reviews yet')).toBeInTheDocument();
+    expect(screen.queryByText('★★★★★')).not.toBeInTheDocument();
   });
 
   it('should handle product with long title', () => {

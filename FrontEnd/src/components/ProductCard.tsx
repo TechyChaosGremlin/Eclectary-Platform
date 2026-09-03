@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { useWishlist } from '../context/WishlistContext';
+import StarRating from './StarRating';
 import type { Product } from '../types/product';
 import '../styles/product-card.css';
 
@@ -33,7 +34,11 @@ function ProductCard({ product }: ProductCardProps) {
       <div className="product-card__content">
         <div className="product-card__meta">
           <span className="product-card__tag">{product.tag}</span>
-          <span className="product-card__rating">★ {product.rating}</span>
+          <StarRating
+            className="product-card__rating"
+            rating={product.rating}
+            reviewCount={product.reviewCount}
+          />
         </div>
 
         <Link to={`/product/${product.id}`} className="product-card__title-link">

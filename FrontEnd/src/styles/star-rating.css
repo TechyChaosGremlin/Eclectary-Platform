@@ -1,0 +1,36 @@
+.star-rating {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 0.86rem;
+  line-height: 1;
+}
+
+.star-rating__stars {
+  font-size: 0.9em;
+  letter-spacing: 0.02em;
+}
+
+.star-rating__filled {
+  color: var(--beige-500);
+}
+
+.star-rating__empty {
+  color: var(--neutral-300);
+}
+
+.star-rating__value {
+  color: var(--neutral-700);
+  font-weight: 700;
+}
+
+.star-rating__count {
+  color: var(--neutral-500);
+  font-weight: 500;
+}
+
+.star-rating--empty {
+  color: var(--neutral-500);
+  font-size: 0.8rem;
+  font-style: italic;
+}

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import ProductCard from '../components/ProductCard';
+import { getStarSegments } from '../components/StarRating';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { products } from '../data/products';
@@ -52,7 +53,9 @@ function ProductDetailContent({ productId }: { productId?: string }) {
   const handleToggleWishlist = () => toggleWishlist(product.id);
   const productType = product.collection ?? 'handcrafted item';
   // Temporary display value until review counts are supplied with product data.
-  const reviewCount = 24;
+  const reviewCount = product.reviewCount ?? 24;
+  const { filled, empty } = getStarSegments(product.rating);
+  const starDisplay = `${'★'.repeat(filled)}${'☆'.repeat(empty)}`;
 
   return (
     <article className="product-detail">
@@ -90,7 +93,7 @@ function ProductDetailContent({ productId }: { productId?: string }) {
           <h1>{product.title}</h1>
 
           <div className="product-detail__rating" aria-label={`Rated ${product.rating.toFixed(1)} out of 5 from ${reviewCount} reviews`}>
-            <span className="product-detail__stars" aria-hidden="true">★★★★★</span>
+            <span className="product-detail__stars" aria-hidden="true">{starDisplay}</span>
             <span>{product.rating.toFixed(1)}</span>
             <button type="button" className="product-detail__review-link">· {reviewCount} reviews</button>
           </div>
@@ -168,7 +171,7 @@ function ProductDetailContent({ productId }: { productId?: string }) {
         <section className="product-detail__info-section product-detail__reviews" aria-labelledby="customer-reviews-heading">
           <h2 id="customer-reviews-heading">Customer reviews</h2>
           <div className="product-detail__rating">
-            <span className="product-detail__stars" aria-hidden="true">★★★★★</span>
+            <span className="product-detail__stars" aria-hidden="true">{starDisplay}</span>
             <span>{product.rating.toFixed(1)}</span>
             <span>· {reviewCount} reviews</span>
           </div>

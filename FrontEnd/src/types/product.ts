@@ -15,5 +15,6 @@ export interface Product {
 	creator: string;
 	tag: string;
 	rating: number;
+	reviewCount?: number;
 	status?: string;
 }

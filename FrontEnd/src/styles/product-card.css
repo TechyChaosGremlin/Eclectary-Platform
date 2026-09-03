@@ -94,9 +94,8 @@
 }
 
 .product-card__rating {
-  color: var(--neutral-700);
-  font-size: 0.78rem;
-  font-weight: 600;
+  flex-shrink: 0;
+  font-size: 0.76rem;
 }
 
 .product-card__title-link {
@@ -174,7 +173,7 @@
   }
 
   .product-card__rating {
-    font-size: 0.75rem;
+    font-size: 0.68rem;
   }
 
   .product-card__title-link h3 {

@@ -90,7 +90,7 @@ function Shop() {
   const [openFilterSections, setOpenFilterSections] = useState(() => ({
     categories: true,
     intentions: false,
-    price: true,
+    price: false,
   }));
   const collection = searchParams.get('collection') ?? '';
   const intention = searchParams.get('intention') ?? '';
