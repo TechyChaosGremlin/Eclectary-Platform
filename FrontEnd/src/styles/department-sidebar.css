@@ -4,8 +4,8 @@
 
 .department-sidebar__section + .department-sidebar__section,
 .department-sidebar__explore {
-  margin-top: 14px;
-  padding-top: 18px;
+  margin-top: 16px;
+  padding-top: 20px;
   border-top: 1px solid rgba(204, 215, 179, 0.35);
 }
 
@@ -13,13 +13,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2px 0;
+  padding: 4px 0;
   color: var(--color-primary);
   cursor: pointer;
   font: var(--text-nav);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   list-style: none;
   text-transform: uppercase;
 }
@@ -45,7 +45,7 @@
   flex-direction: column;
   gap: 0;
   list-style: none;
-  margin: 9px 0 0;
+  margin: 10px 0 0;
   padding: 0;
 }
 
@@ -134,13 +134,7 @@
 }
 
 .department-sidebar__label {
-  margin: 0 0 4px;
-  color: var(--color-primary);
-  font: var(--text-nav);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  display: none;
 }
 
 .department-sidebar__clear {
