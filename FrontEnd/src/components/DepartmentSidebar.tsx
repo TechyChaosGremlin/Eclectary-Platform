@@ -21,9 +21,9 @@ export interface DepartmentSidebarProps {
 }
 
 const departmentDetails = {
-  'purely-handmade': { name: 'Handmade', icon: '🌿', description: 'Handcrafted goods from independent makers', allLabel: 'All Handmade' },
-  'digital-creations': { name: 'Digital Creations', icon: '✦', description: 'Digital art, resources & downloads', allLabel: 'All Digital Creations' },
-  'custom-printing': { name: 'Custom Printing', icon: '▣', description: 'Artist-designed & personalized physical goods', allLabel: 'All Custom Printing' },
+  'purely-handmade': { allLabel: 'All Handmade' },
+  'digital-creations': { allLabel: 'All Digital Creations' },
+  'custom-printing': { allLabel: 'All Custom Printing' },
 } as const;
 
 function DepartmentSidebar({
@@ -44,13 +44,16 @@ function DepartmentSidebar({
 
   return (
     <>
-      <header className={`department-sidebar__header department-sidebar__header--${department}`}>
-        <p className="department-sidebar__eyebrow"><span aria-hidden="true">{details.icon}</span> {details.name}</p>
-        <p className="department-sidebar__description">{details.description}</p>
-      </header>
+      <details className="department-sidebar__section department-sidebar__section--price" open={openSections.price} onToggle={(event) => onSectionToggle('price', event.currentTarget.open)}>
+        <summary className="department-sidebar__heading">Price</summary>
+        <ul className="department-sidebar__list">
+          <li><button type="button" className={`department-sidebar__link${!activePrice ? ' department-sidebar__link--active' : ''}`} aria-pressed={!activePrice} onClick={() => onPriceSelect('')}>Any price</button></li>
+          {priceBuckets.map((bucket) => <li key={bucket.id}><button type="button" className={`department-sidebar__link${activePrice === bucket.id ? ' department-sidebar__link--active' : ''}`} aria-pressed={activePrice === bucket.id} onClick={() => onPriceSelect(bucket.id)}>{bucket.label}</button></li>)}
+        </ul>
+      </details>
 
-      <details className="department-sidebar__section" open={openSections.categories} onToggle={(event) => onSectionToggle('categories', event.currentTarget.open)}>
-        <summary className="department-sidebar__heading">Browse categories</summary>
+      <details className="department-sidebar__section department-sidebar__section--categories" open={openSections.categories} onToggle={(event) => onSectionToggle('categories', event.currentTarget.open)}>
+        <summary className="department-sidebar__heading">Categories</summary>
         <ul className="department-sidebar__list">
           <li><button type="button" className={`department-sidebar__link${!activeCategory ? ' department-sidebar__link--active' : ''}`} aria-pressed={!activeCategory} onClick={() => onCategorySelect('')}>{details.allLabel}</button></li>
           {categories.map((category) => {
@@ -77,21 +80,16 @@ function DepartmentSidebar({
         </ul>
       </details>
 
-      <details className="department-sidebar__section" open={openSections.intentions} onToggle={(event) => onSectionToggle('intentions', event.currentTarget.open)}>
-        <summary className="department-sidebar__heading">Shop by intention</summary>
-        <ul className="department-sidebar__list">
-          <li><button type="button" className={`department-sidebar__link${!activeIntention ? ' department-sidebar__link--active' : ''}`} aria-pressed={!activeIntention} onClick={() => onIntentionSelect('')}>All intentions</button></li>
-          {intentions.map((intention) => <li key={intention}><button type="button" className={`department-sidebar__link${activeIntention === intention ? ' department-sidebar__link--active' : ''}`} aria-pressed={activeIntention === intention} onClick={() => onIntentionSelect(intention)}>{intention}</button></li>)}
-        </ul>
-      </details>
-
-      <details className="department-sidebar__section" open={openSections.price} onToggle={(event) => onSectionToggle('price', event.currentTarget.open)}>
-        <summary className="department-sidebar__heading">Price</summary>
-        <ul className="department-sidebar__list">
-          <li><button type="button" className={`department-sidebar__link${!activePrice ? ' department-sidebar__link--active' : ''}`} aria-pressed={!activePrice} onClick={() => onPriceSelect('')}>Any price</button></li>
-          {priceBuckets.map((bucket) => <li key={bucket.id}><button type="button" className={`department-sidebar__link${activePrice === bucket.id ? ' department-sidebar__link--active' : ''}`} aria-pressed={activePrice === bucket.id} onClick={() => onPriceSelect(bucket.id)}>{bucket.label}</button></li>)}
-        </ul>
-      </details>
+      <div className="department-sidebar__explore">
+        <p className="department-sidebar__label">Explore</p>
+        <details className="department-sidebar__section" open={openSections.intentions} onToggle={(event) => onSectionToggle('intentions', event.currentTarget.open)}>
+          <summary className="department-sidebar__heading">Shop by Intention</summary>
+          <ul className="department-sidebar__list">
+            <li><button type="button" className={`department-sidebar__link${!activeIntention ? ' department-sidebar__link--active' : ''}`} aria-pressed={!activeIntention} onClick={() => onIntentionSelect('')}>All intentions</button></li>
+            {intentions.map((intention) => <li key={intention}><button type="button" className={`department-sidebar__link${activeIntention === intention ? ' department-sidebar__link--active' : ''}`} aria-pressed={activeIntention === intention} onClick={() => onIntentionSelect(intention)}>{intention}</button></li>)}
+          </ul>
+        </details>
+      </div>
 
       {(activeIntention || activeCategory || activePrice) && <button type="button" className="department-sidebar__clear" onClick={onClear}>Clear all filters</button>}
     </>

@@ -196,7 +196,10 @@
   flex-direction: column;
   gap: 16px;
   min-width: 0;
-  padding: 4px 4px 16px 0;
+  padding: 18px 16px 24px 14px;
+  border-right: 1px solid rgba(104, 125, 88, 0.28);
+  border-radius: 0;
+  background: #D4DCCB;
 }
 
 .shop-sidebar__title {
@@ -395,8 +398,8 @@ summary.shop-sidebar__heading::after {
     margin-top: 0;
     padding: 16px;
     border-radius: 0;
-    background: #F8F3EA;
-    border-right: 1px solid var(--sage-300);
+    background: #D4DCCB;
+    border-right: 1px solid rgba(104, 125, 88, 0.38);
     box-shadow: var(--shadow-lg);
   }
 

@@ -160,3 +160,11 @@
 	background: transparent;
 	color: var(--color-primary-2);
 }
+
+.department-sidebar__section--price .department-sidebar__link:not(.department-sidebar__link--active)::before {
+	content: '○';
+	display: inline-block;
+	width: 1.15em;
+	color: var(--sage-700);
+	font-size: 0.9em;
+}
