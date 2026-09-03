@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import ProductCard from '../components/ProductCard';
+import DepartmentSidebar from '../components/DepartmentSidebar';
 import Searchbar from '../components/Searchbar';
 import SellerCard from '../components/SellerCard';
 import logo from '../assets/images/eclectary logo nb.png';
@@ -32,12 +33,14 @@ const SORT_OPTIONS: Array<{ id: string; label: string }> = [
 
 const collectionNames: Record<string, string> = {
   'custom-printing': 'Custom Printing',
-  'purely-handmade': 'Purely Handmade',
+  'purely-handmade': 'Handmade',
   'digital-creations': 'Digital Creations',
 };
 
 const collectionDescriptions: Record<string, string> = {
-  'purely-handmade': 'Physical products made by independent creators.',
+  'purely-handmade': 'Handcrafted goods from independent makers.',
+  'digital-creations': 'Digital art, resources, and instant downloads.',
+  'custom-printing': 'Artist-designed and personalized physical goods.',
 };
 
 const AUTH_STORAGE_KEY = 'eclectary-auth';
@@ -55,7 +58,6 @@ function useIsDesktop() {
     const mediaQuery = window.matchMedia(DESKTOP_MEDIA_QUERY);
     const syncIsDesktop = (event: MediaQueryListEvent) => setIsDesktop(event.matches);
 
-    setIsDesktop(mediaQuery.matches);
     mediaQuery.addEventListener('change', syncIsDesktop);
 
     return () => mediaQuery.removeEventListener('change', syncIsDesktop);
@@ -82,21 +84,27 @@ function Shop() {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [isLoggedIn, setIsLoggedIn] = useState(() => hasAuthSession());
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const filterToggleRef = useRef<HTMLButtonElement>(null);
+  const sidebarRef = useRef<HTMLElement>(null);
   const isDesktop = useIsDesktop();
   const [openFilterSections, setOpenFilterSections] = useState(() => ({
-    categories: isDesktop,
-    intentions: isDesktop,
-    price: isDesktop,
+    categories: true,
+    intentions: false,
+    price: false,
   }));
   const collection = searchParams.get('collection') ?? '';
   const intention = searchParams.get('intention') ?? '';
   const category = searchParams.get('category') ?? '';
+  const subcategory = searchParams.get('subcategory') ?? '';
   const priceBucket = searchParams.get('price') ?? '';
   const sort = searchParams.get('sort') ?? '';
   const collectionName = collectionNames[collection];
   const departmentCategories = collection
     ? categories.filter((item) => item.collection === collection)
     : [];
+  const selectedCategory = departmentCategories.find((item) => item.id === category);
+  const activeCategory = selectedCategory ? category : '';
+  const activeSubcategory = selectedCategory?.childSubcategories?.includes(subcategory) ? subcategory : '';
 
   const setFilterParam = (key: string, nextValue: string) => {
     const nextParams = new URLSearchParams(searchParams);
@@ -111,7 +119,20 @@ function Shop() {
   };
 
   const selectIntention = (nextIntention: string) => setFilterParam('intention', nextIntention);
-  const selectCategory = (nextCategory: string) => setFilterParam('category', nextCategory);
+  const selectCategory = (nextCategory: string, nextSubcategory = '') => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (nextCategory) {
+      nextParams.set('category', nextCategory);
+    } else {
+      nextParams.delete('category');
+    }
+    if (nextSubcategory) {
+      nextParams.set('subcategory', nextSubcategory);
+    } else {
+      nextParams.delete('subcategory');
+    }
+    setSearchParams(nextParams);
+  };
   const selectPrice = (nextPrice: string) => setFilterParam('price', nextPrice);
   const selectSort = (nextSort: string) => setFilterParam('sort', nextSort);
 
@@ -119,6 +140,7 @@ function Shop() {
     const nextParams = new URLSearchParams(searchParams);
     nextParams.delete('intention');
     nextParams.delete('category');
+    nextParams.delete('subcategory');
     nextParams.delete('price');
     nextParams.delete('sort');
     setSearchParams(nextParams);
@@ -137,10 +159,38 @@ function Shop() {
   }, []);
 
   useEffect(() => {
-    if (isDesktop) {
-      setOpenFilterSections({ categories: true, intentions: true, price: true });
+    if (!isFiltersOpen || isDesktop) {
+      return undefined;
     }
-  }, [isDesktop]);
+
+    const firstFocusable = sidebarRef.current?.querySelector<HTMLElement>('button, summary');
+    firstFocusable?.focus();
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsFiltersOpen(false);
+        filterToggleRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('keydown', closeOnEscape);
+    return () => document.removeEventListener('keydown', closeOnEscape);
+  }, [isDesktop, isFiltersOpen]);
+
+  useEffect(() => {
+    if (category && !selectedCategory) {
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete('category');
+      nextParams.delete('subcategory');
+      setSearchParams(nextParams, { replace: true });
+      return;
+    }
+
+    if (subcategory && !activeSubcategory) {
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete('subcategory');
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [activeSubcategory, category, searchParams, selectedCategory, setSearchParams, subcategory]);
 
   const activePriceBucket = PRICE_BUCKETS.find((bucket) => bucket.id === priceBucket);
 
@@ -149,12 +199,15 @@ function Shop() {
     const collectionProducts = collection
       ? products.filter((product) => product.collection === collection)
       : products;
-    const categoryProducts = category
-      ? collectionProducts.filter((product) => product.category === category)
+    const categoryProducts = activeCategory
+      ? collectionProducts.filter((product) => product.category === activeCategory)
       : collectionProducts;
-    const intentionProducts = intention
-      ? categoryProducts.filter((product) => product.intentions?.includes(intention))
+    const subcategoryProducts = activeSubcategory
+      ? categoryProducts.filter((product) => product.subcategory === activeSubcategory)
       : categoryProducts;
+    const intentionProducts = intention
+      ? subcategoryProducts.filter((product) => product.intentions?.includes(intention))
+      : subcategoryProducts;
     const priceProducts = activePriceBucket
       ? intentionProducts.filter((product) => (
         product.price >= activePriceBucket.min
@@ -189,7 +242,7 @@ function Shop() {
     }
 
     return sortedProducts;
-  }, [activePriceBucket, category, collection, intention, searchTerm, sort]);
+  }, [activeCategory, activePriceBucket, activeSubcategory, collection, intention, searchTerm, sort]);
 
   const filteredSellers = useMemo(() => {
     if (collection) {
@@ -287,133 +340,44 @@ function Shop() {
           <button
             type="button"
             className="shop-filters-toggle"
+            ref={filterToggleRef}
             aria-expanded={isFiltersOpen}
             aria-controls="shop-filters"
             onClick={() => setIsFiltersOpen((isOpen) => !isOpen)}
           >
             <span aria-hidden="true">✦</span>
-            Filters
+            Browse {collectionName}
           </button>
 
           <aside
             id="shop-filters"
+            ref={sidebarRef}
             className={`shop-sidebar${isFiltersOpen ? ' shop-sidebar--open' : ''}`}
-            aria-label={`${collectionName} filters`}
+            aria-label={`${collectionName} navigation and filters`}
+            aria-modal={!isDesktop}
+            tabIndex={-1}
           >
-            <p className="shop-sidebar__title"><span aria-hidden="true">✦</span> Filters</p>
-            {departmentCategories.length > 0 && (
-              <details
-                className="shop-sidebar__section"
-                open={isDesktop ? openFilterSections.categories : undefined}
-                onToggle={(event) => {
-                  const isOpen = event.currentTarget.open;
-                  setOpenFilterSections((sections) => ({ ...sections, categories: isOpen }));
-                }}
-              >
-                <summary className="shop-sidebar__heading"><span aria-hidden="true">✧</span> Categories</summary>
-                <ul className="shop-sidebar__list">
-                  <li>
-                    <button
-                      type="button"
-                      className={`shop-sidebar__link${!category ? ' shop-sidebar__link--active' : ''}`}
-                      aria-pressed={!category}
-                      onClick={() => selectCategory('')}
-                    >
-                      All categories
-                    </button>
-                  </li>
-                  {departmentCategories.map((departmentCategory) => (
-                    <li key={departmentCategory.id}>
-                      <button
-                        type="button"
-                        className={`shop-sidebar__link${category === departmentCategory.id ? ' shop-sidebar__link--active' : ''}`}
-                        aria-pressed={category === departmentCategory.id}
-                        onClick={() => selectCategory(departmentCategory.id)}
-                      >
-                        {departmentCategory.name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            )}
-
-            <details
-              className="shop-sidebar__section"
-              open={isDesktop ? openFilterSections.intentions : undefined}
-                onToggle={(event) => {
-                  const isOpen = event.currentTarget.open;
-                  setOpenFilterSections((sections) => ({ ...sections, intentions: isOpen }));
-                }}
-            >
-              <summary className="shop-sidebar__heading"><span aria-hidden="true">✦</span> Shop by intention</summary>
-              <ul className="shop-sidebar__list">
-                <li>
-                  <button
-                    type="button"
-                    className={`shop-sidebar__link${!intention ? ' shop-sidebar__link--active' : ''}`}
-                    aria-pressed={!intention}
-                    onClick={() => selectIntention('')}
-                  >
-                    All intentions
-                  </button>
-                </li>
-                {intentions.map((availableIntention) => (
-                  <li key={availableIntention}>
-                    <button
-                      type="button"
-                      className={`shop-sidebar__link${intention === availableIntention ? ' shop-sidebar__link--active' : ''}`}
-                      aria-pressed={intention === availableIntention}
-                      onClick={() => selectIntention(availableIntention)}
-                    >
-                      {availableIntention}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </details>
-
-            <details
-              className="shop-sidebar__section"
-              open={isDesktop ? openFilterSections.price : undefined}
-                onToggle={(event) => {
-                  const isOpen = event.currentTarget.open;
-                  setOpenFilterSections((sections) => ({ ...sections, price: isOpen }));
-                }}
-            >
-              <summary className="shop-sidebar__heading"><span aria-hidden="true">◇</span> Price</summary>
-              <ul className="shop-sidebar__list">
-                <li>
-                  <button
-                    type="button"
-                    className={`shop-sidebar__link${!priceBucket ? ' shop-sidebar__link--active' : ''}`}
-                    aria-pressed={!priceBucket}
-                    onClick={() => selectPrice('')}
-                  >
-                    Any price
-                  </button>
-                </li>
-                {PRICE_BUCKETS.map((bucket) => (
-                  <li key={bucket.id}>
-                    <button
-                      type="button"
-                      className={`shop-sidebar__link${priceBucket === bucket.id ? ' shop-sidebar__link--active' : ''}`}
-                      aria-pressed={priceBucket === bucket.id}
-                      onClick={() => selectPrice(bucket.id)}
-                    >
-                      {bucket.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </details>
-
-            {(intention || category || priceBucket) && (
-              <button type="button" className="shop-sidebar__clear" onClick={clearDepartmentFilters}>
-                Clear all filters
-              </button>
-            )}
+            <DepartmentSidebar
+              key={collection}
+              department={collection as 'purely-handmade' | 'digital-creations' | 'custom-printing'}
+              categories={departmentCategories}
+              activeCategory={activeCategory}
+              activeSubcategory={activeSubcategory}
+              activeIntention={intention}
+              activePrice={priceBucket}
+              priceBuckets={PRICE_BUCKETS}
+              intentions={intentions}
+              openSections={openFilterSections}
+              onSectionToggle={(section, open) => setOpenFilterSections((sections) => ({ ...sections, [section]: open }))}
+              onCategorySelect={selectCategory}
+              onIntentionSelect={selectIntention}
+              onPriceSelect={selectPrice}
+              onClear={clearDepartmentFilters}
+            />
           </aside>
+          {isFiltersOpen && !isDesktop && (
+            <button type="button" className="shop-sidebar-backdrop" aria-label="Close department navigation" onClick={() => { setIsFiltersOpen(false); filterToggleRef.current?.focus(); }} />
+          )}
 
           <div className="shop-main">
             <div className="shop-toolbar">
@@ -422,7 +386,8 @@ function Shop() {
                   {filteredProducts.length} result{filteredProducts.length === 1 ? '' : 's'}
                   {searchTerm && ` for “${searchTerm}”`}
                   {intention && ` with the intention “${intention}”`}
-                  {category && ` in “${departmentCategories.find((item) => item.id === category)?.name ?? category}”`}
+                  {activeCategory && ` in “${departmentCategories.find((item) => item.id === activeCategory)?.name ?? activeCategory}”`}
+                  {activeSubcategory && ` / ${activeSubcategory}`}
                   {activePriceBucket && ` priced ${activePriceBucket.label.toLowerCase()}`}
                 </p>
               ) : <span />}

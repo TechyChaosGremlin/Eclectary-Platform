@@ -42,6 +42,12 @@ function Navbar() {
                 <img src={logo} alt="Eclectary" />
             </Link>
 
+            <div className="primary-nav" aria-label="Eclectary departments">
+                <Link className="primary-nav__link" to="/shop?collection=purely-handmade">Handmade</Link>
+                <Link className="primary-nav__link" to="/shop?collection=digital-creations">Digital Creations</Link>
+                <Link className="primary-nav__link" to="/shop?collection=custom-printing">Custom Printing</Link>
+            </div>
+
             <div className="account-actions">
                 <Link
                     to={isLoggedIn ? "/account/profile" : "/account/login"}

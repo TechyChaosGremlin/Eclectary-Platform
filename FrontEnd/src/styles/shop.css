@@ -196,11 +196,7 @@
   flex-direction: column;
   gap: 16px;
   min-width: 0;
-  padding: 18px 16px 16px;
-  border: 1px solid #CCD7B3;
-  border-radius: var(--radius-lg);
-  background: #F8F3EA;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  padding: 4px 4px 16px 0;
 }
 
 .shop-sidebar__title {
@@ -389,13 +385,32 @@ summary.shop-sidebar__heading::after {
 
   .shop-sidebar {
     display: none;
-    position: static;
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    width: min(88vw, 360px);
+    height: 100dvh;
+    overflow-y: auto;
     margin-top: 0;
     padding: 16px;
+    border-radius: 0;
+    background: #F8F3EA;
+    border-right: 1px solid var(--sage-300);
+    box-shadow: var(--shadow-lg);
   }
 
   .shop-sidebar--open {
     display: flex;
+  }
+
+  .shop-sidebar-backdrop {
+    position: fixed;
+    z-index: 19;
+    inset: 0;
+    border: 0;
+    background: rgba(29, 29, 29, 0.35);
+    cursor: pointer;
   }
 }
 
@@ -582,6 +597,7 @@ summary.shop-sidebar__heading::after {
 @media (max-width: 600px) {
   .shop-page {
     width: min(100% - var(--content-padding-mobile), var(--container-width-mobile));
+    overflow-x: clip;
   }
 
   .shop-layout {
