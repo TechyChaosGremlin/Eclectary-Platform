@@ -197,9 +197,9 @@
   gap: 16px;
   min-width: 0;
   padding: 18px 16px 24px 14px;
-  border-right: 1px solid rgba(204, 215, 179, 0.75);
+  border-right: 1px solid rgba(204, 215, 179, 0.55);
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.85);
+  background: #F1EFE9;
 }
 
 .shop-sidebar__title {
@@ -218,7 +218,7 @@
 
 .shop-sidebar__section + .shop-sidebar__section {
   padding-top: 16px;
-  border-top: 1px solid rgba(204, 215, 179, 0.45);
+  border-top: 1px solid rgba(204, 215, 179, 0.35);
 }
 
 .shop-sidebar__heading {
@@ -398,8 +398,8 @@ summary.shop-sidebar__heading::after {
     margin-top: 0;
     padding: 16px;
     border-radius: 0;
-    background: rgba(255, 255, 255, 0.85);
-    border-right: 1px solid rgba(204, 215, 179, 0.75);
+    background: #F1EFE9;
+    border-right: 1px solid rgba(204, 215, 179, 0.55);
     box-shadow: var(--shadow-lg);
   }
 
@@ -495,13 +495,23 @@ summary.shop-sidebar__heading::after {
 }
 
 .shop-sort select {
-  border: 1px solid var(--border-aura);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid rgba(204, 215, 179, 0.55);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.85);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2358174C' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
   color: var(--color-primary);
   cursor: pointer;
   font: var(--text-nav);
-  padding: 7px 12px;
+  padding: 6px 26px 6px 12px;
+}
+
+.shop-sort select::-ms-expand {
+  display: none;
 }
 
 .shop-sort select:focus-visible {
