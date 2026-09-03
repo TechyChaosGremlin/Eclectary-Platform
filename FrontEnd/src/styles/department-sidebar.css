@@ -6,7 +6,7 @@
 .department-sidebar__explore {
   margin-top: 14px;
   padding-top: 18px;
-  border-top: 1px solid rgba(104, 125, 88, 0.22);
+  border-top: 1px solid rgba(204, 215, 179, 0.45);
 }
 
 .department-sidebar__heading {
@@ -117,7 +117,7 @@
 .department-sidebar__subcategories {
   margin: 3px 0 7px 10px;
   padding-left: 10px;
-  border-left: 1px solid rgba(104, 125, 88, 0.4);
+  border-left: 1px solid rgba(204, 215, 179, 0.6);
 }
 
 .department-sidebar__sublink {

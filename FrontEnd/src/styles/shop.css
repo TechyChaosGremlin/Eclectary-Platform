@@ -197,7 +197,7 @@
   gap: 16px;
   min-width: 0;
   padding: 18px 16px 24px 14px;
-  border-right: 1px solid #DDD9D1;
+  border-right: 1px solid rgba(204, 215, 179, 0.75);
   border-radius: 0;
   background: rgba(255, 255, 255, 0.85);
 }
@@ -218,7 +218,7 @@
 
 .shop-sidebar__section + .shop-sidebar__section {
   padding-top: 16px;
-  border-top: 1px solid rgba(155, 178, 128, 0.55);
+  border-top: 1px solid rgba(204, 215, 179, 0.45);
 }
 
 .shop-sidebar__heading {
@@ -399,7 +399,7 @@ summary.shop-sidebar__heading::after {
     padding: 16px;
     border-radius: 0;
     background: rgba(255, 255, 255, 0.85);
-    border-right: 1px solid #DDD9D1;
+    border-right: 1px solid rgba(204, 215, 179, 0.75);
     box-shadow: var(--shadow-lg);
   }
 
