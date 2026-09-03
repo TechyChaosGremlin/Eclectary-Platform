@@ -1,4 +1,5 @@
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter, Link, Navigate, Routes, Route, useParams } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
 import SellerLayout from "./layouts/SellerLayout";
@@ -18,7 +19,9 @@ import Profile from "./pages/Profile";
 import ProductCard from "./components/ProductCard";
 import SellerCard from "./components/SellerCard";
 import { products } from "./data/products";
+import { getCategory, handmadeCategories, isValidCategorySelection } from "./data/categories";
 import { getSellers } from "./services/sellerApi";
+import type { Product } from "./types";
 import "./App.css";
 
 function NotFound() {
@@ -70,14 +73,82 @@ function Products() {
       <h2>Products</h2>
       <p>{products.length} products from the mock catalog.</p>
       <div className="shop-grid" style={{ marginTop: 24 }}>
-        {products.map((product) => <ProductCard key={product.id} product={product} />)}
+        {products.map((product) => (
+          <div key={product.id}>
+            <ProductCard product={product} />
+            <Link to={`/dashboard/products/${product.id}/edit`}>Edit listing</Link>
+          </div>
+        ))}
       </div>
     </section>
   )
 }
 
+function ListingForm({ product }: { product?: Product }) {
+  const [categoryId, setCategoryId] = useState(product?.category ?? '');
+  const [subcategory, setSubcategory] = useState(product?.subcategory ?? '');
+  const [message, setMessage] = useState('');
+  const selectedCategory = getCategory(categoryId);
+
+  const selectCategory = (nextCategoryId: string) => {
+    setCategoryId(nextCategoryId);
+    setSubcategory('');
+    setMessage('');
+  };
+
+  const submitListing = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setMessage(
+      isValidCategorySelection('purely-handmade', categoryId, subcategory)
+        ? 'Handmade category selection is valid.'
+        : 'Choose a Handmade category and one of its subcategories.',
+    );
+  };
+
+  return (
+    <section style={{ padding: 24, maxWidth: 640 }}>
+      <h2>{product ? 'Edit Handmade Listing' : 'Add Handmade Listing'}</h2>
+      <form onSubmit={submitListing}>
+        <label style={{ display: 'grid', gap: 6, marginTop: 16 }}>
+          <span>Department</span>
+          <input value="Handmade" readOnly aria-readonly="true" />
+        </label>
+        <label style={{ display: 'grid', gap: 6, marginTop: 16 }}>
+          <span>Category</span>
+          <select value={categoryId} onChange={(event) => selectCategory(event.target.value)} required>
+            <option value="">Choose a category</option>
+            {handmadeCategories.map((category) => (
+              <option key={category.id} value={category.id}>{category.name}</option>
+            ))}
+          </select>
+        </label>
+        <label style={{ display: 'grid', gap: 6, marginTop: 16 }}>
+          <span>Subcategory</span>
+          <select value={subcategory} onChange={(event) => setSubcategory(event.target.value)} required disabled={!selectedCategory}>
+            <option value="">Choose a subcategory</option>
+            {selectedCategory?.childSubcategories?.map((child) => (
+              <option key={child} value={child}>{child}</option>
+            ))}
+          </select>
+        </label>
+        <button type="submit" style={{ marginTop: 20 }}>{product ? 'Validate changes' : 'Validate listing'}</button>
+      </form>
+      {message && <p aria-live="polite">{message}</p>}
+    </section>
+  );
+}
+
 function AddProduct() {
-  return <div style={{ padding: 24 }}><h2>Add Product</h2><p>New product form placeholder.</p></div>
+  return <ListingForm />;
+}
+
+function EditProduct() {
+  const { id } = useParams();
+  const product = products.find((item) => item.id === Number(id));
+
+  return product?.collection === 'purely-handmade'
+    ? <ListingForm product={product} />
+    : <section style={{ padding: 24 }}><h2>Listing unavailable</h2><p>Only Handmade mock listings support this category editor.</p></section>;
 }
 
 function AccountIndex() {
@@ -133,6 +204,7 @@ function App() {
           <Route index element={<DashboardOverview />} />
           <Route path="products" element={<Products />} />
           <Route path="products/new" element={<AddProduct />} />
+          <Route path="products/:id/edit" element={<EditProduct />} />
           <Route path="orders" element={<div style={{ padding: 24 }}>Orders</div>} />
           <Route path="settings" element={<div style={{ padding: 24 }}>Settings</div>} />
         </Route>

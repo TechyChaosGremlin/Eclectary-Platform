@@ -5,6 +5,9 @@ export function getProducts(): Product[] {
 	return products;
 }
 
-export function getProductsByCategory(categoryId: string): Product[] {
-	return products.filter((product) => product.category === categoryId);
+export function getProductsByCategory(categoryId: string, subcategory?: string): Product[] {
+	return products.filter((product) => (
+		product.category === categoryId
+		&& (!subcategory || product.subcategory === subcategory)
+	));
 }

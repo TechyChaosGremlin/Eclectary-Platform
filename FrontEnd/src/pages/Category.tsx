@@ -1,15 +1,18 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 
 import ProductCard from '../components/ProductCard';
 import SellerCard from '../components/SellerCard';
-import { categories } from '../data/categories';
+import { getCategory } from '../data/categories';
 import { getProductsByCategory } from '../services/productApi';
 import { getSellersByCategory } from '../services/sellerApi';
 import '../styles/category-detail.css';
 
 function Category() {
   const { id } = useParams();
-  const category = id ? categories.find((item) => item.id === id) : undefined;
+  const [searchParams] = useSearchParams();
+  const category = id ? getCategory(id) : undefined;
+  const subcategory = searchParams.get('subcategory') ?? '';
+  const isValidSubcategory = Boolean(category?.childSubcategories?.includes(subcategory));
 
   if (!category) {
     return (
@@ -23,7 +26,7 @@ function Category() {
     );
   }
 
-  const categoryProducts = getProductsByCategory(category.id);
+  const categoryProducts = getProductsByCategory(category.id, isValidSubcategory ? subcategory : undefined);
   const categorySellers = getSellersByCategory(category.id);
 
   return (
@@ -37,13 +40,16 @@ function Category() {
         <div className="category-detail__copy">
           <p className="eyebrow">Marketplace category</p>
           <h1>{category.name}</h1>
-          {Boolean(category.childSubcategories?.length) && (
-            <p className="category-detail__subcategories">
-              Child categories: {category.childSubcategories?.join(', ')}
-            </p>
-          )}
+          <p className="category-detail__subcategories">
+            <Link to={`/category/${category.id}`}>All {category.name}</Link>
+            {category.childSubcategories?.map((child) => (
+              <Link key={child} to={`/category/${category.id}?subcategory=${encodeURIComponent(child)}`}>
+                {child}
+              </Link>
+            ))}
+          </p>
           <p className="category-detail__count">
-            {categoryProducts.length} item{categoryProducts.length === 1 ? '' : 's'}
+            {isValidSubcategory ? `${subcategory}: ` : ''}{categoryProducts.length} item{categoryProducts.length === 1 ? '' : 's'}
           </p>
         </div>
       </header>

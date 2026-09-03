@@ -7,7 +7,7 @@ export const sellers: Seller[] = [
     specialty: 'Ceramics & tableware',
     bio: 'Hand-thrown stoneware and quiet everyday rituals for slow living.',
     image: 'https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=1200&q=80',
-    categories: ['home-altar', 'crystals-natural-goods'],
+    categories: ['ceramics-clay', 'herbs-botanicals'],
   },
   {
     id: 'hearth-thread',
@@ -15,7 +15,7 @@ export const sellers: Seller[] = [
     specialty: 'Textiles & home',
     bio: 'Natural fibers, layered textures, and cozy pieces for soulful spaces.',
     image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80',
-    categories: ['home-altar', 'art-fiber'],
+    categories: ['altar-sacred-goods', 'fiber-arts-textiles'],
   },
   {
     id: 'petal-foundry',
@@ -23,7 +23,7 @@ export const sellers: Seller[] = [
     specialty: 'Art prints & botanicals',
     bio: 'Pressed floral work, thoughtful stationery, and tactile keepsakes.',
     image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1200&q=80',
-    categories: ['art-fiber', 'stationery-paper'],
+    categories: ['handmade-art', 'handmade-books-journals'],
   },
   {
     id: 'moonwell-studio',
@@ -31,7 +31,7 @@ export const sellers: Seller[] = [
     specialty: 'Divination & journaling',
     bio: 'Oracle tools, reflective cards, and guided rituals for intuitive living.',
     image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1200&q=80',
-    categories: ['tarot-divination', 'stationery-paper'],
+    categories: ['divination', 'handmade-books-journals'],
   },
   {
     id: 'quiet-bloom',
@@ -39,7 +39,7 @@ export const sellers: Seller[] = [
     specialty: 'Self-care rituals',
     bio: 'Bath blends, grounding routines, and gentle care essentials.',
     image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=1200&q=80',
-    categories: ['bath-body-wellness', 'ritual-witchcraft'],
+    categories: ['bath-body', 'candles-wax'],
   },
   {
     id: 'rooted-co',
@@ -47,7 +47,7 @@ export const sellers: Seller[] = [
     specialty: 'Kitchen & home rituals',
     bio: 'Practical objects with a grounded, natural point of view.',
     image: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=80',
-    categories: ['home-altar', 'ritual-witchcraft'],
+    categories: ['altar-sacred-goods', 'witchcraft-spellcraft'],
   },
   {
     id: 'ink-and-orbit',
@@ -55,7 +55,7 @@ export const sellers: Seller[] = [
     specialty: 'Stationery & paper goods',
     bio: 'Illustrated notebooks and correspondence pieces for curious minds.',
     image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80',
-    categories: ['stationery-paper', 'tarot-divination'],
+    categories: ['handmade-books-journals', 'divination'],
   },
   {
     id: 'solstice-scent',
@@ -63,7 +63,7 @@ export const sellers: Seller[] = [
     specialty: 'Candles & fragrance',
     bio: 'Small-batch scents inspired by changing light, weather, and place.',
     image: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80',
-    categories: ['ritual-witchcraft', 'bath-body-wellness'],
+    categories: ['candles-wax', 'incense-aromatics'],
   },
   {
     id: 'wild-fig-press',
@@ -71,7 +71,7 @@ export const sellers: Seller[] = [
     specialty: 'Printmaking & illustration',
     bio: 'Limited-run linocuts and paper art with a little woodland wonder.',
     image: 'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1200&q=80',
-    categories: ['art-fiber', 'stationery-paper'],
+    categories: ['handmade-art', 'handmade-books-journals'],
   },
   {
     id: 'kindred-keepsakes',
@@ -79,6 +79,6 @@ export const sellers: Seller[] = [
     specialty: 'Gifts & personalized goods',
     bio: 'Meaningful mementos made for milestones, memories, and everyday joy.',
     image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1200&q=80',
-    categories: ['gifts-seasonal', 'jewelry-adornment'],
+    categories: ['handmade-gifts-sets', 'jewelry-adornments'],
   },
 ];
