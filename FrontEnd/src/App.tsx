@@ -19,7 +19,7 @@ import Profile from "./pages/Profile";
 import ProductCard from "./components/ProductCard";
 import SellerCard from "./components/SellerCard";
 import { products } from "./data/products";
-import { getCategory, handmadeCategories, isValidCategorySelection } from "./data/categories";
+import { categories, isValidCategorySelection } from "./data/categories";
 import { getSellers } from "./services/sellerApi";
 import type { Product } from "./types";
 import "./App.css";
@@ -85,10 +85,25 @@ function Products() {
 }
 
 function ListingForm({ product }: { product?: Product }) {
+  const [collection, setCollection] = useState<Product['collection']>(product?.collection ?? 'digital-creations');
   const [categoryId, setCategoryId] = useState(product?.category ?? '');
   const [subcategory, setSubcategory] = useState(product?.subcategory ?? '');
   const [message, setMessage] = useState('');
-  const selectedCategory = getCategory(categoryId);
+  const departmentCategories = categories.filter((category) => category.collection === collection);
+  const selectedCategory = departmentCategories.find((category) => category.id === categoryId);
+
+  const collectionNames: Record<NonNullable<Product['collection']>, string> = {
+    'custom-printing': 'Custom Printing',
+    'purely-handmade': 'Handmade',
+    'digital-creations': 'Digital Creations',
+  };
+
+  const selectCollection = (nextCollection: Product['collection']) => {
+    setCollection(nextCollection);
+    setCategoryId('');
+    setSubcategory('');
+    setMessage('');
+  };
 
   const selectCategory = (nextCategoryId: string) => {
     setCategoryId(nextCategoryId);
@@ -99,25 +114,29 @@ function ListingForm({ product }: { product?: Product }) {
   const submitListing = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setMessage(
-      isValidCategorySelection('purely-handmade', categoryId, subcategory)
-        ? 'Handmade category selection is valid.'
-        : 'Choose a Handmade category and one of its subcategories.',
+      collection && isValidCategorySelection(collection, categoryId, subcategory)
+        ? `${collectionNames[collection]} category selection is valid.`
+        : `Choose a ${collection ? collectionNames[collection] : 'department'} category and one of its subcategories.`,
     );
   };
 
   return (
     <section style={{ padding: 24, maxWidth: 640 }}>
-      <h2>{product ? 'Edit Handmade Listing' : 'Add Handmade Listing'}</h2>
+      <h2>{product ? 'Edit Listing' : 'Add Listing'}</h2>
       <form onSubmit={submitListing}>
         <label style={{ display: 'grid', gap: 6, marginTop: 16 }}>
           <span>Department</span>
-          <input value="Handmade" readOnly aria-readonly="true" />
+          <select value={collection} onChange={(event) => selectCollection(event.target.value as Product['collection'])} required>
+            <option value="digital-creations">Digital Creations</option>
+            <option value="purely-handmade">Handmade</option>
+            <option value="custom-printing">Custom Printing</option>
+          </select>
         </label>
         <label style={{ display: 'grid', gap: 6, marginTop: 16 }}>
           <span>Category</span>
           <select value={categoryId} onChange={(event) => selectCategory(event.target.value)} required>
             <option value="">Choose a category</option>
-            {handmadeCategories.map((category) => (
+            {departmentCategories.map((category) => (
               <option key={category.id} value={category.id}>{category.name}</option>
             ))}
           </select>
@@ -146,9 +165,9 @@ function EditProduct() {
   const { id } = useParams();
   const product = products.find((item) => item.id === Number(id));
 
-  return product?.collection === 'purely-handmade'
+  return product?.collection
     ? <ListingForm product={product} />
-    : <section style={{ padding: 24 }}><h2>Listing unavailable</h2><p>Only Handmade mock listings support this category editor.</p></section>;
+    : <section style={{ padding: 24 }}><h2>Listing unavailable</h2><p>This listing does not have a valid department.</p></section>;
 }
 
 function AccountIndex() {
