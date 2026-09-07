@@ -46,7 +46,7 @@ function Footer() {
             <ul>
               <li><a href="#">FAQ</a></li>
               <li><a href="#">Contact</a></li>
-              <li><a href={FEEDBACK_URL}>Feedback &amp; Roadmap</a></li>
+              <li><a href={FEEDBACK_URL}>Feedback</a></li>
               <li><a href="#">Shipping</a></li>
               <li><a href="#">Returns</a></li>
             </ul>

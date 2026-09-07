@@ -465,6 +465,52 @@
 
 .legacy-hero-banner img { display: block; width: 100%; height: auto; }
 
+.home-feedback-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: var(--legacy-rail-width);
+  margin: 30px auto 0;
+  padding: 22px 26px;
+  border: 1px solid #CCD7B3;
+  border-radius: 8px;
+  background: #F8F3EA;
+  box-shadow: 0 3px 12px rgba(61, 15, 53, 0.08);
+}
+
+.home-feedback-banner h2 {
+  margin: 0 0 6px;
+  color: #58174C;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.45rem;
+}
+
+.home-feedback-banner p:last-child {
+  margin: 0;
+  color: #6C625D;
+}
+
+.home-feedback-banner__link {
+  flex-shrink: 0;
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: #58174C;
+  color: #FFFFFF;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.home-feedback-banner__link:hover,
+.home-feedback-banner__link:focus-visible {
+  background: #A14D76;
+}
+
+.home-feedback-banner__link:focus-visible {
+  outline: 2px solid #58174C;
+  outline-offset: 3px;
+}
+
 .home-market-section {
   width: var(--legacy-rail-width);
   margin: 0 auto;
@@ -537,6 +583,17 @@
 }
 
 .home-category-grid .category-card { border-radius: 8px; }
+
+@media (max-width: 600px) {
+  .home-feedback-banner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .home-feedback-banner__link { align-self: stretch; text-align: center; }
+}
 
 .home-category-grid .category-card__link { min-height: 142px; }
 

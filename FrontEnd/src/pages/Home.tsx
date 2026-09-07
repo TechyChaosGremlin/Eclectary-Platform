@@ -20,6 +20,7 @@ import '../styles/home.css';
 const sellers = getSellers();
 const AUTH_STORAGE_KEY = 'eclectary-auth';
 const AUTH_EVENT_NAME = 'eclectary-auth-change';
+const FEEDBACK_URL = import.meta.env.VITE_FEEDBACK_URL || 'http://localhost:3000';
 
 function hasAuthSession() {
   if (typeof window === 'undefined') {
@@ -179,6 +180,15 @@ function Home() {
           {filteredSellers.map((seller) => <SellerCard key={seller.id} seller={seller} />)}
         </div>
         <div className="makers-footer"><Link to="/shop">View All Makers <span aria-hidden="true">→</span></Link></div>
+      </section>
+
+      <section className="home-feedback-banner" aria-labelledby="feedback-heading">
+        <div>
+          <p className="home-section-kicker">Help shape Eclectary</p>
+          <h2 id="feedback-heading">Have an idea or request?</h2>
+          <p>Tell us what you would love to see, find, or experience next.</p>
+        </div>
+        <a className="home-feedback-banner__link" href={FEEDBACK_URL}>Share feedback <span aria-hidden="true">→</span></a>
       </section>
     </div>
   );
