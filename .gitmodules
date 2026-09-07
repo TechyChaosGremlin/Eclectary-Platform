@@ -1,0 +1,3 @@
+[submodule "FeedLog"]
+	path = FeedLog
+	url = https://github.com/linkcraftstudio/feedlog.git

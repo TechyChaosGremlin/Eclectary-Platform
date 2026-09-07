@@ -31,3 +31,5 @@ BackEnd/config/credentials/*.key
 *.njsproj
 *.sln
 *.sw?
+
+FeedLog/.data

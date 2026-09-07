@@ -1,5 +1,7 @@
 import "../styles/footer.css";
 
+const FEEDBACK_URL = import.meta.env.VITE_FEEDBACK_URL || "http://localhost:3000";
+
 function Footer() {
   return (
     <footer className="site-footer" role="contentinfo" aria-label="Site footer">
@@ -44,6 +46,7 @@ function Footer() {
             <ul>
               <li><a href="#">FAQ</a></li>
               <li><a href="#">Contact</a></li>
+              <li><a href={FEEDBACK_URL}>Feedback &amp; Roadmap</a></li>
               <li><a href="#">Shipping</a></li>
               <li><a href="#">Returns</a></li>
             </ul>

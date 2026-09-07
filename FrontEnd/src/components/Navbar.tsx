@@ -6,6 +6,7 @@ import logo from "../assets/images/eclectary logo nb.png";
 
 const AUTH_STORAGE_KEY = "eclectary-auth";
 const AUTH_EVENT_NAME = "eclectary-auth-change";
+const FEEDBACK_URL = import.meta.env.VITE_FEEDBACK_URL || "http://localhost:3000";
 
 function hasAuthSession() {
     if (typeof window === "undefined") {
@@ -46,6 +47,7 @@ function Navbar() {
                 <Link className="primary-nav__link" to="/shop?collection=purely-handmade">Handmade</Link>
                 <Link className="primary-nav__link" to="/shop?collection=digital-creations">Digital Creations</Link>
                 <Link className="primary-nav__link" to="/shop?collection=custom-printing">Custom Printing</Link>
+                <a className="primary-nav__link" href={FEEDBACK_URL}>Feedback</a>
             </div>
 
             <div className="account-actions">
