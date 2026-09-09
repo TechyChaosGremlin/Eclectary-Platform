@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 import App from "./App";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
@@ -15,6 +16,7 @@ ReactDOM.createRoot(
       <WishlistProvider>
         <App />
         <SpeedInsights />
+        <Analytics />
       </WishlistProvider>
     </CartProvider>
   </React.StrictMode>
