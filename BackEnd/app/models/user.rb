@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
 
+  has_many :products, foreign_key: :seller_id, dependent: :destroy
+
   validates :email, presence: true, uniqueness: true
   validates :role, presence: true, inclusion: { in: %w[customer seller administrator] }
 
