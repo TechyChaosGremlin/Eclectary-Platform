@@ -33,3 +33,4 @@ BackEnd/config/credentials/*.key
 *.sw?
 
 FeedLog/.data
+/eclectary-backend/
