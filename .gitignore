@@ -21,6 +21,11 @@ dist-ssr
 BackEnd/config/master.key
 BackEnd/config/credentials/*.key
 
+# Rails runtime/cache artifacts
+BackEnd/tmp/
+BackEnd/log/*
+!BackEnd/log/.keep
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
