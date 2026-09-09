@@ -8,7 +8,10 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get "health", to: "base#health"
+      resources :users, only: %i[create index]
+      get "users/me", to: "users#me"
       resources :products, only: %i[index show]
+      post "login", to: "sessions#create"
     end
   end
 
