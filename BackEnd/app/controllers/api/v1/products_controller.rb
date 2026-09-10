@@ -1,25 +1,24 @@
 module Api
   module V1
     class ProductsController < BaseController
-      module Api
-  module V1
-    class BaseController < ApplicationController
-
-      def health
-        render json: { status: "ok", api_version: "v1" }
-      end
-
-    end
-  end
-end
       def index
-        render json: { message: "Products endpoint is not implemented yet." }
+        products = Product.all
+
+        render json: {
+          data: products.map { |product| ProductSerializer.new(product).as_json },
+          pagination: {
+            page: 1,
+            per_page: products.length,
+            total: products.length
+          }
+        }
       end
 
       def show
+        product = Product.find(params[:id])
+
         render json: {
-          message: "Product endpoint is not implemented yet.",
-          id: params[:id]
+          data: ProductSerializer.new(product).as_json
         }
       end
     end

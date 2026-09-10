@@ -1,11 +1,13 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   title: MyString
   description: MyText
   price: 9.99
+  seller_id: <%= ActiveRecord::FixtureSet.identify(:two) %>
+  category_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
 
 two:
-  title: MyString
-  description: MyText
-  price: 9.99
+  title: MyString Two
+  description: MyText Two
+  price: 19.99
+  seller_id: <%= ActiveRecord::FixtureSet.identify(:two) %>
+  category_id: <%= ActiveRecord::FixtureSet.identify(:two) %>

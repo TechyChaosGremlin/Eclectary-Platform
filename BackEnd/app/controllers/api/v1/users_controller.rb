@@ -6,18 +6,16 @@ class Api::V1::UsersController < Api::V1::BaseController
   require_role :administrator, only: [ :index ]
 
   def index
-    render json: User.all.map { |user| { id: user.id, email: user.email, role: user.role } }
-  end
+    render json: {
+  data: User.all.map { |user| UserSerializer.new(user).as_json }
+}
+    end
 
   def create
     user = User.new(user_params)
 
     if user.save
-      render json: {
-        id: user.id,
-        email: user.email,
-        role: user.role
-      }, status: :created
+      render json: UserSerializer.new(user).as_json, status: :created
     else
       render json: {
         errors: user.errors.full_messages
@@ -26,12 +24,8 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def me
-  render json: {
-    id: current_user.id,
-    email: current_user.email,
-    role: current_user.role
-  }
-end
+    render json: UserSerializer.new(current_user).as_json
+  end
 
   private
 
