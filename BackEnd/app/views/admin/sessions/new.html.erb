@@ -1,0 +1,17 @@
+<h1>Administrator Login</h1>
+
+<%= form_with url: "/admin/login", method: :post, local: true do |form| %>
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :password %>
+    <%= form.password_field :password, required: true %>
+  </div>
+
+  <div>
+    <%= form.submit "Log In" %>
+  </div>
+<% end %>

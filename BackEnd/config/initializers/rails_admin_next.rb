@@ -1,4 +1,19 @@
 RailsAdminNext.config do |config|
+  config.authenticate_with do
+  unless session[:admin_user_id]
+    redirect_to "/admin/login" unless request.path == "/admin/login"
+  end
+end
+
+config.current_user_method do
+  User.find_by(id: session[:admin_user_id])
+end
+
+config.authorize_with do
+  unless request.path == "/admin/login" || _current_user&.administrator?
+    render plain: "Forbidden", status: :forbidden
+  end
+end
   ### Popular gems integration
 
   ## == Devise ==
