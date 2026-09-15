@@ -1,19 +1,30 @@
 RailsAdminNext.config do |config|
+  config.included_models = %w[
+    User
+    Product
+    Category
+    Cart
+    CartItem
+    Order
+    OrderItem
+  ]
+
   config.authenticate_with do
-  unless session[:admin_user_id]
-    redirect_to "/admin/login" unless request.path == "/admin/login"
+    unless session[:admin_user_id]
+      redirect_to "/admin-login" unless request.path == "/admin-login"
   end
 end
 
-config.current_user_method do
-  User.find_by(id: session[:admin_user_id])
-end
-
-config.authorize_with do
-  unless request.path == "/admin/login" || _current_user&.administrator?
-    render plain: "Forbidden", status: :forbidden
+  config.current_user_method do
+    User.find_by(id: session[:admin_user_id])
   end
-end
+
+  config.authorize_with do
+    unless request.path == "/admin-login" || _current_user&.administrator?
+      render plain: "Forbidden", status: :forbidden
+    end
+  end
+
   ### Popular gems integration
 
   ## == Devise ==
@@ -29,17 +40,11 @@ end
   # config.authorize_with :pundit
 
   ## == PaperTrail ==
-  # config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
-
-  ### More at https://github.com/railsadminteam/rails_admin/wiki/Base-configuration
-
-  ## == Gravatar integration ==
-  ## To disable Gravatar integration in Navigation Bar set to false
-  # config.show_gravatar = true
+  # config.audit_with :paper_trail, 'User', 'PaperTrail::Version'
 
   config.actions do
-    dashboard                     # mandatory
-    index                         # mandatory
+    dashboard
+    index
     new
     export
     bulk_delete
@@ -47,9 +52,5 @@ end
     edit
     delete
     show_in_app
-
-    ## With an audit adapter, you can add:
-    # history_index
-    # history_show
   end
 end
