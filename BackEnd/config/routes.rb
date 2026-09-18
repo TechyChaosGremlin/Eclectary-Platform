@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
-  mount RailsAdminNext::Engine => '/admin', as: 'rails_admin_next'
+  namespace :admin do
+    post "login", to: "sessions#create"
+  end
+
+  delete "/admin/logout", to: "admin/sessions#destroy", as: :logout
+  get "/admin/auth/login", to: "admin/sessions#new"
+
+  mount RailsAdminNext::Engine => "/admin", as: "rails_admin_next"
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   namespace :api do

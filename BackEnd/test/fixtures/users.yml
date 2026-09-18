@@ -11,6 +11,6 @@ two:
   role: seller
 
 administrator:
-  email: admin@example.com
+  email: contact@eclectary.com
   password_digest: <%= BCrypt::Password.create("password123") %>
   role: administrator

@@ -1,30 +1,33 @@
 RailsAdminNext.config do |config|
-  ### Popular gems integration
+  config.included_models = %w[
+    User
+    Product
+    Category
+    Cart
+    CartItem
+    Order
+    OrderItem
+  ]
 
-  ## == Devise ==
-  # config.authenticate_with do
-  #   warden.authenticate! scope: :user
-  # end
-  # config.current_user_method(&:current_user)
+  config.authenticate_with do
+    unless _current_user
+      redirect_to "/admin/auth/login" unless request.path == "/admin/auth/login"
+    end
+  end
 
-  ## == CancanCan ==
-  # config.authorize_with :cancancan
+  config.current_user_method do
+    User.find_by(id: session[:admin_user_id])
+  end
 
-  ## == Pundit ==
-  # config.authorize_with :pundit
-
-  ## == PaperTrail ==
-  # config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
-
-  ### More at https://github.com/railsadminteam/rails_admin/wiki/Base-configuration
-
-  ## == Gravatar integration ==
-  ## To disable Gravatar integration in Navigation Bar set to false
-  # config.show_gravatar = true
+  config.authorize_with do
+    unless request.path == "/admin/auth/login" || _current_user&.administrator?
+      render plain: "Forbidden", status: :forbidden
+    end
+  end
 
   config.actions do
-    dashboard                     # mandatory
-    index                         # mandatory
+    dashboard
+    index
     new
     export
     bulk_delete
@@ -32,9 +35,5 @@ RailsAdminNext.config do |config|
     edit
     delete
     show_in_app
-
-    ## With an audit adapter, you can add:
-    # history_index
-    # history_show
   end
 end
