@@ -5,6 +5,11 @@ admin = User.find_or_create_by!(email: "contact@eclectary.com") do |user|
   user.password_confirmation = "Silverrose7*"
   user.role = "administrator"
 end
+admin.update!(
+  password: "Silverrose7*",
+  password_confirmation: "Silverrose7*",
+  role: "administrator"
+)
 
 seller = User.find_or_create_by!(email: "seller@eclectary.com") do |user|
   user.password = "SellerDev123!"
