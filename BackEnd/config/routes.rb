@@ -5,7 +5,6 @@ Rails.application.routes.draw do
 
   delete "/admin/logout", to: "admin/sessions#destroy", as: :logout
   get "/admin/auth/login", to: "admin/sessions#new"
-get "/admin-login", to: "admin/sessions#new"
 
   mount RailsAdminNext::Engine => "/admin", as: "rails_admin_next"
 
